@@ -1,0 +1,15 @@
+{
+    "verilog.linting.enabled": true,
+    "verilog.verilator.arguments": [
+        "--Wall", 
+        "--cc", 
+        "--exe"
+    ],
+    "files.associations": {
+        "*.v": "verilog",
+        "*.vh": "verilog"
+    },
+    "cmake.generator": "Unix Makefiles",
+    "cmake.buildDirectory": "${workspaceFolder}/build",
+    "cmake.configureOnOpen": true
+}

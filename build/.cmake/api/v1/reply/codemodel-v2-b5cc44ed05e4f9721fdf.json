@@ -1,0 +1,112 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.29"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "vcpu32",
+					"jsonFile" : "directory-vcpu32-Debug-4fb53ec1097a6073f80c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.29"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "vcpu32"
+				},
+				{
+					"build" : "test-benches/Module1_TB",
+					"jsonFile" : "directory-test-benches.Module1_TB-Debug-cc4f9f084b60b901634c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.29"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "test-benches/Module1_TB"
+				},
+				{
+					"build" : "test-benches/Module2_TB",
+					"jsonFile" : "directory-test-benches.Module2_TB-Debug-80851f5ea70b252ed967.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.29"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "test-benches/Module2_TB"
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "VCPU32-FPGA"
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1
+					],
+					"name" : "vcpu32",
+					"parentIndex" : 0
+				},
+				{
+					"directoryIndexes" : 
+					[
+						2
+					],
+					"name" : "Module1_TB",
+					"parentIndex" : 0
+				},
+				{
+					"directoryIndexes" : 
+					[
+						3
+					],
+					"name" : "Module2_TB",
+					"parentIndex" : 0
+				}
+			],
+			"targets" : []
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/helmutfieres/GitHub/VCPU32-FPGA/build",
+		"source" : "/Users/helmutfieres/GitHub/VCPU32-FPGA"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
