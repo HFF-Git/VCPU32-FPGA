@@ -29,7 +29,13 @@
 					},
 					"parentIndex" : 0,
 					"projectIndex" : 1,
-					"source" : "vcpu32"
+					"source" : "vcpu32",
+					"targetIndexes" : 
+					[
+						3,
+						4,
+						5
+					]
 				},
 				{
 					"build" : "test-benches/Module1_TB",
@@ -82,7 +88,13 @@
 						1
 					],
 					"name" : "vcpu32",
-					"parentIndex" : 0
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						3,
+						4,
+						5
+					]
 				},
 				{
 					"directoryIndexes" : 
@@ -111,24 +123,45 @@
 			[
 				{
 					"directoryIndex" : 2,
-					"id" : "compile_verilog::@7af68e9b0b059dc455e2",
-					"jsonFile" : "target-compile_verilog-Debug-cb3b7b821d5737f53f76.json",
-					"name" : "compile_verilog",
+					"id" : "Module1_TB_compile::@7af68e9b0b059dc455e2",
+					"jsonFile" : "target-Module1_TB_compile-Debug-5aa8cdca981bcf6156ff.json",
+					"name" : "Module1_TB_compile",
 					"projectIndex" : 2
 				},
 				{
 					"directoryIndex" : 2,
-					"id" : "run_simulation::@7af68e9b0b059dc455e2",
-					"jsonFile" : "target-run_simulation-Debug-7f51ca75e249a712fb03.json",
-					"name" : "run_simulation",
+					"id" : "Module1_TB_simulate::@7af68e9b0b059dc455e2",
+					"jsonFile" : "target-Module1_TB_simulate-Debug-ff46d95acc0511344915.json",
+					"name" : "Module1_TB_simulate",
 					"projectIndex" : 2
 				},
 				{
 					"directoryIndex" : 2,
-					"id" : "view_waveform::@7af68e9b0b059dc455e2",
-					"jsonFile" : "target-view_waveform-Debug-d919f8a32dea9a2b9501.json",
-					"name" : "view_waveform",
+					"id" : "Module1_TB_waveform::@7af68e9b0b059dc455e2",
+					"jsonFile" : "target-Module1_TB_waveform-Debug-5b49d9123d36ff29454a.json",
+					"name" : "Module1_TB_waveform",
 					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "vcpu32_compile::@618e4773db54cef1b62f",
+					"jsonFile" : "target-vcpu32_compile-Debug-f0342d65b229aa203761.json",
+					"name" : "vcpu32_compile",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "vcpu32_run::@618e4773db54cef1b62f",
+					"jsonFile" : "target-vcpu32_run-Debug-b6813410e55d40cf0f0b.json",
+					"name" : "vcpu32_run",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "vcpu32_waveform::@618e4773db54cef1b62f",
+					"jsonFile" : "target-vcpu32_waveform-Debug-647b94c94702f1ba9cb1.json",
+					"name" : "vcpu32_waveform",
+					"projectIndex" : 1
 				}
 			]
 		}

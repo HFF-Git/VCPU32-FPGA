@@ -116,6 +116,48 @@ depend:
 	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
+# Convenience name for target.
+vcpu32/CMakeFiles/vcpu32_compile.dir/rule:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32/CMakeFiles/vcpu32_compile.dir/rule
+.PHONY : vcpu32/CMakeFiles/vcpu32_compile.dir/rule
+
+# Convenience name for target.
+vcpu32_compile: vcpu32/CMakeFiles/vcpu32_compile.dir/rule
+.PHONY : vcpu32_compile
+
+# fast build rule for target.
+vcpu32_compile/fast:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_compile.dir/build.make vcpu32/CMakeFiles/vcpu32_compile.dir/build
+.PHONY : vcpu32_compile/fast
+
+# Convenience name for target.
+vcpu32/CMakeFiles/vcpu32_run.dir/rule:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32/CMakeFiles/vcpu32_run.dir/rule
+.PHONY : vcpu32/CMakeFiles/vcpu32_run.dir/rule
+
+# Convenience name for target.
+vcpu32_run: vcpu32/CMakeFiles/vcpu32_run.dir/rule
+.PHONY : vcpu32_run
+
+# fast build rule for target.
+vcpu32_run/fast:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_run.dir/build.make vcpu32/CMakeFiles/vcpu32_run.dir/build
+.PHONY : vcpu32_run/fast
+
+# Convenience name for target.
+vcpu32/CMakeFiles/vcpu32_waveform.dir/rule:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32/CMakeFiles/vcpu32_waveform.dir/rule
+.PHONY : vcpu32/CMakeFiles/vcpu32_waveform.dir/rule
+
+# Convenience name for target.
+vcpu32_waveform: vcpu32/CMakeFiles/vcpu32_waveform.dir/rule
+.PHONY : vcpu32_waveform
+
+# fast build rule for target.
+vcpu32_waveform/fast:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_waveform.dir/build.make vcpu32/CMakeFiles/vcpu32_waveform.dir/build
+.PHONY : vcpu32_waveform/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -124,6 +166,9 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... vcpu32_compile"
+	@echo "... vcpu32_run"
+	@echo "... vcpu32_waveform"
 .PHONY : help
 
 

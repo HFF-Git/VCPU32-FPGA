@@ -18,19 +18,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 48,
+				"line" : 43,
 				"parent" : 0
 			}
 		]
 	},
-	"dependencies" : 
-	[
-		{
-			"id" : "run_simulation::@7af68e9b0b059dc455e2"
-		}
-	],
-	"id" : "view_waveform::@7af68e9b0b059dc455e2",
-	"name" : "view_waveform",
+	"id" : "Module1_TB_waveform::@7af68e9b0b059dc455e2",
+	"name" : "Module1_TB_waveform",
 	"paths" : 
 	{
 		"build" : "test-benches/Module1_TB",
@@ -58,13 +52,13 @@
 		{
 			"backtrace" : 1,
 			"isGenerated" : true,
-			"path" : "build/test-benches/Module1_TB/CMakeFiles/view_waveform",
+			"path" : "build/test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform",
 			"sourceGroupIndex" : 0
 		},
 		{
 			"backtrace" : 0,
 			"isGenerated" : true,
-			"path" : "build/test-benches/Module1_TB/CMakeFiles/view_waveform.rule",
+			"path" : "build/test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.rule",
 			"sourceGroupIndex" : 1
 		}
 	],

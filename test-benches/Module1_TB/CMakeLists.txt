@@ -13,40 +13,35 @@ cmake_minimum_required( VERSION 3.29 )
 
 project( Module1_TB )
 
-# Set the source and library directory
-set(SRC_DIR ${CMAKE_SOURCE_DIR})
-set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/include)
-
-# Specify the Verilog source files
-set(VERILOG_SOURCES
-    ${SRC_DIR}/Modfule1_TB.v
+set( VERILOG_SOURCES
+    Module1_TB.v
+    ${CMAKE_SOURCE_DIR}/vcpu32/vcpu32.v  # Reference the module under test
 )
 
-# Specify the output files
-set(COMPILED_VERILOG ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.out)
-set(VCD_OUTPUT ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.vcd)
+set( COMPILED_VERILOG ${CMAKE_BINARY_DIR}/$(PROJECT_NAME).out )
+set( VCD_OUTPUT ${CMAKE_BINARY_DIR}/$(PROJECT_NAME).vcd )
 
-# Target 1: Compile Verilog only
+include_directories(  ${CMAKE_SOURCE_DIR}/vcpu32 )
+
 add_custom_target(
-    compile_verilog
-    COMMAND iverilog -g2012 -I${INCLUDE_DIR} -o ${COMPILED_VERILOG} ${VERILOG_SOURCES}
+    Module1_TB_compile
+    # COMMAND iverilog -g2012 -I${INCLUDE_DIR} -o ${COMPILED_VERILOG} ${VERILOG_SOURCES}
+    COMMAND iverilog -g2012 -o $(COMPILED_VERILOG)
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
     DEPENDS ${VERILOG_SOURCES}
     COMMENT "Compiling Verilog code with Icarus Verilog"
 )
 
-# Target 2: Compile and run Verilog simulation (vvp)
 add_custom_target(
-    run_simulation
+    Module1_TB_simulate
     COMMAND vvp ${COMPILED_VERILOG}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     DEPENDS compile_verilog
     COMMENT "Running the Verilog simulation to generate VCD file"
 )
 
-# Target 3: Compile, run simulation, and open GTKWave
 add_custom_target(
-    view_waveform
+    Module1_TB_waveform
     COMMAND vvp ${COMPILED_VERILOG}
     COMMAND gtkwave ${VCD_OUTPUT}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}

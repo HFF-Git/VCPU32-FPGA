@@ -117,46 +117,46 @@ depend:
 .PHONY : depend
 
 # Convenience name for target.
-test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/rule:
-	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/rule
-.PHONY : test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/rule
+test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/rule:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/rule
+.PHONY : test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/rule
 
 # Convenience name for target.
-compile_verilog: test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/rule
-.PHONY : compile_verilog
+Module1_TB_compile: test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/rule
+.PHONY : Module1_TB_compile
 
 # fast build rule for target.
-compile_verilog/fast:
-	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/build.make test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/build
-.PHONY : compile_verilog/fast
+Module1_TB_compile/fast:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/build.make test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/build
+.PHONY : Module1_TB_compile/fast
 
 # Convenience name for target.
-test-benches/Module1_TB/CMakeFiles/run_simulation.dir/rule:
-	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Module1_TB/CMakeFiles/run_simulation.dir/rule
-.PHONY : test-benches/Module1_TB/CMakeFiles/run_simulation.dir/rule
+test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/rule:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/rule
+.PHONY : test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/rule
 
 # Convenience name for target.
-run_simulation: test-benches/Module1_TB/CMakeFiles/run_simulation.dir/rule
-.PHONY : run_simulation
+Module1_TB_simulate: test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/rule
+.PHONY : Module1_TB_simulate
 
 # fast build rule for target.
-run_simulation/fast:
-	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/run_simulation.dir/build.make test-benches/Module1_TB/CMakeFiles/run_simulation.dir/build
-.PHONY : run_simulation/fast
+Module1_TB_simulate/fast:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/build.make test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/build
+.PHONY : Module1_TB_simulate/fast
 
 # Convenience name for target.
-test-benches/Module1_TB/CMakeFiles/view_waveform.dir/rule:
-	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Module1_TB/CMakeFiles/view_waveform.dir/rule
-.PHONY : test-benches/Module1_TB/CMakeFiles/view_waveform.dir/rule
+test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/rule:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/rule
+.PHONY : test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/rule
 
 # Convenience name for target.
-view_waveform: test-benches/Module1_TB/CMakeFiles/view_waveform.dir/rule
-.PHONY : view_waveform
+Module1_TB_waveform: test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/rule
+.PHONY : Module1_TB_waveform
 
 # fast build rule for target.
-view_waveform/fast:
-	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/view_waveform.dir/build.make test-benches/Module1_TB/CMakeFiles/view_waveform.dir/build
-.PHONY : view_waveform/fast
+Module1_TB_waveform/fast:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/build.make test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/build
+.PHONY : Module1_TB_waveform/fast
 
 # Help Target
 help:
@@ -166,9 +166,9 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... compile_verilog"
-	@echo "... run_simulation"
-	@echo "... view_waveform"
+	@echo "... Module1_TB_compile"
+	@echo "... Module1_TB_simulate"
+	@echo "... Module1_TB_waveform"
 .PHONY : help
 
 

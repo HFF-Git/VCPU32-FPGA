@@ -117,43 +117,82 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named compile_verilog
+# Target rules for targets named vcpu32_compile
 
 # Build rule for target.
-compile_verilog: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compile_verilog
-.PHONY : compile_verilog
+vcpu32_compile: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32_compile
+.PHONY : vcpu32_compile
 
 # fast build rule for target.
-compile_verilog/fast:
-	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/build.make test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/build
-.PHONY : compile_verilog/fast
+vcpu32_compile/fast:
+	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_compile.dir/build.make vcpu32/CMakeFiles/vcpu32_compile.dir/build
+.PHONY : vcpu32_compile/fast
 
 #=============================================================================
-# Target rules for targets named run_simulation
+# Target rules for targets named vcpu32_run
 
 # Build rule for target.
-run_simulation: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 run_simulation
-.PHONY : run_simulation
+vcpu32_run: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32_run
+.PHONY : vcpu32_run
 
 # fast build rule for target.
-run_simulation/fast:
-	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/run_simulation.dir/build.make test-benches/Module1_TB/CMakeFiles/run_simulation.dir/build
-.PHONY : run_simulation/fast
+vcpu32_run/fast:
+	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_run.dir/build.make vcpu32/CMakeFiles/vcpu32_run.dir/build
+.PHONY : vcpu32_run/fast
 
 #=============================================================================
-# Target rules for targets named view_waveform
+# Target rules for targets named vcpu32_waveform
 
 # Build rule for target.
-view_waveform: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 view_waveform
-.PHONY : view_waveform
+vcpu32_waveform: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32_waveform
+.PHONY : vcpu32_waveform
 
 # fast build rule for target.
-view_waveform/fast:
-	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/view_waveform.dir/build.make test-benches/Module1_TB/CMakeFiles/view_waveform.dir/build
-.PHONY : view_waveform/fast
+vcpu32_waveform/fast:
+	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_waveform.dir/build.make vcpu32/CMakeFiles/vcpu32_waveform.dir/build
+.PHONY : vcpu32_waveform/fast
+
+#=============================================================================
+# Target rules for targets named Module1_TB_compile
+
+# Build rule for target.
+Module1_TB_compile: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Module1_TB_compile
+.PHONY : Module1_TB_compile
+
+# fast build rule for target.
+Module1_TB_compile/fast:
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/build.make test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/build
+.PHONY : Module1_TB_compile/fast
+
+#=============================================================================
+# Target rules for targets named Module1_TB_simulate
+
+# Build rule for target.
+Module1_TB_simulate: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Module1_TB_simulate
+.PHONY : Module1_TB_simulate
+
+# fast build rule for target.
+Module1_TB_simulate/fast:
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/build.make test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/build
+.PHONY : Module1_TB_simulate/fast
+
+#=============================================================================
+# Target rules for targets named Module1_TB_waveform
+
+# Build rule for target.
+Module1_TB_waveform: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Module1_TB_waveform
+.PHONY : Module1_TB_waveform
+
+# fast build rule for target.
+Module1_TB_waveform/fast:
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/build.make test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/build
+.PHONY : Module1_TB_waveform/fast
 
 # Help Target
 help:
@@ -163,9 +202,12 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... compile_verilog"
-	@echo "... run_simulation"
-	@echo "... view_waveform"
+	@echo "... Module1_TB_compile"
+	@echo "... Module1_TB_simulate"
+	@echo "... Module1_TB_waveform"
+	@echo "... vcpu32_compile"
+	@echo "... vcpu32_run"
+	@echo "... vcpu32_waveform"
 .PHONY : help
 
 
