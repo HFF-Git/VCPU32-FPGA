@@ -40,7 +40,13 @@
 					},
 					"parentIndex" : 0,
 					"projectIndex" : 2,
-					"source" : "test-benches/Module1_TB"
+					"source" : "test-benches/Module1_TB",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
 				},
 				{
 					"build" : "test-benches/Module2_TB",
@@ -84,7 +90,13 @@
 						2
 					],
 					"name" : "Module1_TB",
-					"parentIndex" : 0
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
 				},
 				{
 					"directoryIndexes" : 
@@ -95,7 +107,30 @@
 					"parentIndex" : 0
 				}
 			],
-			"targets" : []
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 2,
+					"id" : "compile_verilog::@7af68e9b0b059dc455e2",
+					"jsonFile" : "target-compile_verilog-Debug-cb3b7b821d5737f53f76.json",
+					"name" : "compile_verilog",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "run_simulation::@7af68e9b0b059dc455e2",
+					"jsonFile" : "target-run_simulation-Debug-7f51ca75e249a712fb03.json",
+					"name" : "run_simulation",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "view_waveform::@7af68e9b0b059dc455e2",
+					"jsonFile" : "target-view_waveform-Debug-d919f8a32dea9a2b9501.json",
+					"name" : "view_waveform",
+					"projectIndex" : 2
+				}
+			]
 		}
 	],
 	"kind" : "codemodel",

@@ -116,6 +116,45 @@ depend:
 	$(CMAKE_COMMAND) -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
+#=============================================================================
+# Target rules for targets named compile_verilog
+
+# Build rule for target.
+compile_verilog: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 compile_verilog
+.PHONY : compile_verilog
+
+# fast build rule for target.
+compile_verilog/fast:
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/build.make test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/build
+.PHONY : compile_verilog/fast
+
+#=============================================================================
+# Target rules for targets named run_simulation
+
+# Build rule for target.
+run_simulation: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 run_simulation
+.PHONY : run_simulation
+
+# fast build rule for target.
+run_simulation/fast:
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/run_simulation.dir/build.make test-benches/Module1_TB/CMakeFiles/run_simulation.dir/build
+.PHONY : run_simulation/fast
+
+#=============================================================================
+# Target rules for targets named view_waveform
+
+# Build rule for target.
+view_waveform: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 view_waveform
+.PHONY : view_waveform
+
+# fast build rule for target.
+view_waveform/fast:
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/view_waveform.dir/build.make test-benches/Module1_TB/CMakeFiles/view_waveform.dir/build
+.PHONY : view_waveform/fast
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -124,6 +163,9 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... compile_verilog"
+	@echo "... run_simulation"
+	@echo "... view_waveform"
 .PHONY : help
 
 

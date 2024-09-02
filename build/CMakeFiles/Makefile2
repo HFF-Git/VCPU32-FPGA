@@ -92,7 +92,9 @@ test-benches/Module1_TB/preinstall:
 .PHONY : test-benches/Module1_TB/preinstall
 
 # Recursive "clean" directory target.
-test-benches/Module1_TB/clean:
+test-benches/Module1_TB/clean: test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/clean
+test-benches/Module1_TB/clean: test-benches/Module1_TB/CMakeFiles/run_simulation.dir/clean
+test-benches/Module1_TB/clean: test-benches/Module1_TB/CMakeFiles/view_waveform.dir/clean
 .PHONY : test-benches/Module1_TB/clean
 
 #=============================================================================
@@ -124,6 +126,84 @@ vcpu32/preinstall:
 # Recursive "clean" directory target.
 vcpu32/clean:
 .PHONY : vcpu32/clean
+
+#=============================================================================
+# Target rules for target test-benches/Module1_TB/CMakeFiles/compile_verilog.dir
+
+# All Build rule for target.
+test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/all:
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/build.make test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/depend
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/build.make test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=1 "Built target compile_verilog"
+.PHONY : test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/all
+
+# Build rule for subdir invocation for target.
+test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 1
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 0
+.PHONY : test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/rule
+
+# Convenience name for target.
+compile_verilog: test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/rule
+.PHONY : compile_verilog
+
+# clean rule for target.
+test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/build.make test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/clean
+.PHONY : test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/clean
+
+#=============================================================================
+# Target rules for target test-benches/Module1_TB/CMakeFiles/run_simulation.dir
+
+# All Build rule for target.
+test-benches/Module1_TB/CMakeFiles/run_simulation.dir/all: test-benches/Module1_TB/CMakeFiles/compile_verilog.dir/all
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/run_simulation.dir/build.make test-benches/Module1_TB/CMakeFiles/run_simulation.dir/depend
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/run_simulation.dir/build.make test-benches/Module1_TB/CMakeFiles/run_simulation.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=2 "Built target run_simulation"
+.PHONY : test-benches/Module1_TB/CMakeFiles/run_simulation.dir/all
+
+# Build rule for subdir invocation for target.
+test-benches/Module1_TB/CMakeFiles/run_simulation.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Module1_TB/CMakeFiles/run_simulation.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 0
+.PHONY : test-benches/Module1_TB/CMakeFiles/run_simulation.dir/rule
+
+# Convenience name for target.
+run_simulation: test-benches/Module1_TB/CMakeFiles/run_simulation.dir/rule
+.PHONY : run_simulation
+
+# clean rule for target.
+test-benches/Module1_TB/CMakeFiles/run_simulation.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/run_simulation.dir/build.make test-benches/Module1_TB/CMakeFiles/run_simulation.dir/clean
+.PHONY : test-benches/Module1_TB/CMakeFiles/run_simulation.dir/clean
+
+#=============================================================================
+# Target rules for target test-benches/Module1_TB/CMakeFiles/view_waveform.dir
+
+# All Build rule for target.
+test-benches/Module1_TB/CMakeFiles/view_waveform.dir/all: test-benches/Module1_TB/CMakeFiles/run_simulation.dir/all
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/view_waveform.dir/build.make test-benches/Module1_TB/CMakeFiles/view_waveform.dir/depend
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/view_waveform.dir/build.make test-benches/Module1_TB/CMakeFiles/view_waveform.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=3 "Built target view_waveform"
+.PHONY : test-benches/Module1_TB/CMakeFiles/view_waveform.dir/all
+
+# Build rule for subdir invocation for target.
+test-benches/Module1_TB/CMakeFiles/view_waveform.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Module1_TB/CMakeFiles/view_waveform.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 0
+.PHONY : test-benches/Module1_TB/CMakeFiles/view_waveform.dir/rule
+
+# Convenience name for target.
+view_waveform: test-benches/Module1_TB/CMakeFiles/view_waveform.dir/rule
+.PHONY : view_waveform
+
+# clean rule for target.
+test-benches/Module1_TB/CMakeFiles/view_waveform.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/view_waveform.dir/build.make test-benches/Module1_TB/CMakeFiles/view_waveform.dir/clean
+.PHONY : test-benches/Module1_TB/CMakeFiles/view_waveform.dir/clean
 
 #=============================================================================
 # Special targets to cleanup operation of make.

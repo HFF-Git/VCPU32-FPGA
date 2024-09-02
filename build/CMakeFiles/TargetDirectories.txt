@@ -2,6 +2,9 @@
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles/rebuild_cache.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/CMakeFiles/edit_cache.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/CMakeFiles/rebuild_cache.dir
+/Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/CMakeFiles/compile_verilog.dir
+/Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/CMakeFiles/run_simulation.dir
+/Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/CMakeFiles/view_waveform.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/CMakeFiles/edit_cache.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/CMakeFiles/rebuild_cache.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module2_TB/CMakeFiles/edit_cache.dir
