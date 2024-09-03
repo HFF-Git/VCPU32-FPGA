@@ -24,7 +24,7 @@ set( VCD_OUTPUT ${CMAKE_BINARY_DIR}/$(PROJECT_NAME).vcd )
 include_directories(  ${CMAKE_SOURCE_DIR}/vcpu32 )
 
 add_custom_target(
-    Module1_TB_compile
+    ${PROJECT_NAME}_compile
     # COMMAND iverilog -g2012 -I${INCLUDE_DIR} -o ${COMPILED_VERILOG} ${VERILOG_SOURCES}
     COMMAND iverilog -g2012 -o $(COMPILED_VERILOG)
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
@@ -33,7 +33,7 @@ add_custom_target(
 )
 
 add_custom_target(
-    Module1_TB_simulate
+    ${PROJECT_NAME}_simulate
     COMMAND vvp ${COMPILED_VERILOG}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     DEPENDS compile_verilog
@@ -41,7 +41,7 @@ add_custom_target(
 )
 
 add_custom_target(
-    Module1_TB_waveform
+    ${PROJECT_NAME}_waveform
     COMMAND vvp ${COMPILED_VERILOG}
     COMMAND gtkwave ${VCD_OUTPUT}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
