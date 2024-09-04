@@ -1,7 +1,7 @@
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles/edit_cache.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles/rebuild_cache.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/CMakeFiles/vcpu32_compile.dir
-/Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/CMakeFiles/vcpu32_run.dir
+/Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/CMakeFiles/vcpu32_simulate.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/CMakeFiles/vcpu32_waveform.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/CMakeFiles/edit_cache.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/CMakeFiles/rebuild_cache.dir

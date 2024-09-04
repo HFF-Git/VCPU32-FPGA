@@ -69,7 +69,7 @@ include test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/progress.make
 test-benches/Module1_TB/CMakeFiles/Module1_TB_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/test-benches/Module1_TB/Module1_TB.v
 test-benches/Module1_TB/CMakeFiles/Module1_TB_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/vcpu32.v
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Compiling Verilog code with Icarus Verilog"
-	cd /Users/helmutfieres/GitHub/VCPU32-FPGA && iverilog -g2012 -o $(COMPILED_VERILOG)
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA && iverilog -g2012 -o /Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/Module1_TB.out /Users/helmutfieres/GitHub/VCPU32-FPGA/test-benches/Module1_TB/Module1_TB.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/vcpu32.v
 
 Module1_TB_compile: test-benches/Module1_TB/CMakeFiles/Module1_TB_compile
 Module1_TB_compile: test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/build.make

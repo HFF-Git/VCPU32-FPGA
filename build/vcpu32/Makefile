@@ -131,18 +131,18 @@ vcpu32_compile/fast:
 .PHONY : vcpu32_compile/fast
 
 # Convenience name for target.
-vcpu32/CMakeFiles/vcpu32_run.dir/rule:
-	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32/CMakeFiles/vcpu32_run.dir/rule
-.PHONY : vcpu32/CMakeFiles/vcpu32_run.dir/rule
+vcpu32/CMakeFiles/vcpu32_simulate.dir/rule:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32/CMakeFiles/vcpu32_simulate.dir/rule
+.PHONY : vcpu32/CMakeFiles/vcpu32_simulate.dir/rule
 
 # Convenience name for target.
-vcpu32_run: vcpu32/CMakeFiles/vcpu32_run.dir/rule
-.PHONY : vcpu32_run
+vcpu32_simulate: vcpu32/CMakeFiles/vcpu32_simulate.dir/rule
+.PHONY : vcpu32_simulate
 
 # fast build rule for target.
-vcpu32_run/fast:
-	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_run.dir/build.make vcpu32/CMakeFiles/vcpu32_run.dir/build
-.PHONY : vcpu32_run/fast
+vcpu32_simulate/fast:
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA/build && $(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_simulate.dir/build.make vcpu32/CMakeFiles/vcpu32_simulate.dir/build
+.PHONY : vcpu32_simulate/fast
 
 # Convenience name for target.
 vcpu32/CMakeFiles/vcpu32_waveform.dir/rule:
@@ -167,7 +167,7 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... vcpu32_compile"
-	@echo "... vcpu32_run"
+	@echo "... vcpu32_simulate"
 	@echo "... vcpu32_waveform"
 .PHONY : help
 

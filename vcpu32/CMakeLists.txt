@@ -11,16 +11,15 @@ cmake_minimum_required( VERSION 3.29 )
 
 project( vcpu32 )
 
-set(SRC_DIR ${CMAKE_SOURCE_DIR})
 set(INCLUDE_DIR ${CMAKE_SOURCE_DIR})
 
 set(VERILOG_SOURCES
 
-    ${SRC_DIR}/vcpu32.v
+    ${CMAKE_SOURCE_DIR}/vcpu32/vcpu32.v
 )
 
-set(COMPILED_VERILOG ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.out)
-set(VCD_OUTPUT ${CMAKE_BINARY_DIR}/${PROJECT_NAME}.vcd)
+set( COMPILED_VERILOG ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}.out )
+set( VCD_OUTPUT ${CMAKE_BINARY_DIR}/${PROJECT_NAME}/${PROJECT_NAME}.vcd )
 
 add_custom_target(
     ${PROJECT_NAME}_compile
@@ -31,19 +30,19 @@ add_custom_target(
 )
 
 add_custom_target(
-    ${PROJECT_NAME}_run
+    ${PROJECT_NAME}_simulate
     COMMAND vvp ${COMPILED_VERILOG}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    DEPENDS compile_verilog
+    DEPENDS ${PROJECT_NAME}_compile
     COMMENT "Running the Verilog simulation to generate VCD file"
 )
 
 add_custom_target(
     ${PROJECT_NAME}_waveform
-    COMMAND vvp ${COMPILED_VERILOG}
+    # COMMAND vvp ${COMPILED_VERILOG}
     COMMAND gtkwave ${VCD_OUTPUT}
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    DEPENDS run_simulation
+    DEPENDS ${PROJECT_NAME}_simulate
     COMMENT "Opening GTKWave to view the waveform"
 )
 

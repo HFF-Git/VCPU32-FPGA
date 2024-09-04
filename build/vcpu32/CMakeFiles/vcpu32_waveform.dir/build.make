@@ -66,10 +66,9 @@ include vcpu32/CMakeFiles/vcpu32_waveform.dir/compiler_depend.make
 # Include the progress variables for this target.
 include vcpu32/CMakeFiles/vcpu32_waveform.dir/progress.make
 
-vcpu32/CMakeFiles/vcpu32_waveform: vcpu32/run_simulation
+vcpu32/CMakeFiles/vcpu32_waveform:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Opening GTKWave to view the waveform"
-	vvp /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32.out
-	gtkwave /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32.vcd
+	gtkwave /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/vcpu32.vcd
 
 vcpu32_waveform: vcpu32/CMakeFiles/vcpu32_waveform
 vcpu32_waveform: vcpu32/CMakeFiles/vcpu32_waveform.dir/build.make

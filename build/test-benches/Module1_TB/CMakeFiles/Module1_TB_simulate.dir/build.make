@@ -66,9 +66,9 @@ include test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/compiler_depe
 # Include the progress variables for this target.
 include test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/progress.make
 
-test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate: test-benches/Module1_TB/compile_verilog
+test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Running the Verilog simulation to generate VCD file"
-	vvp /Users/helmutfieres/GitHub/VCPU32-FPGA/build/$(PROJECT_NAME).out
+	vvp /Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/Module1_TB.out
 
 Module1_TB_simulate: test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate
 Module1_TB_simulate: test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/build.make

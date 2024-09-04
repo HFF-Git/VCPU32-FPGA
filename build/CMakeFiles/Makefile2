@@ -125,7 +125,7 @@ vcpu32/preinstall:
 
 # Recursive "clean" directory target.
 vcpu32/clean: vcpu32/CMakeFiles/vcpu32_compile.dir/clean
-vcpu32/clean: vcpu32/CMakeFiles/vcpu32_run.dir/clean
+vcpu32/clean: vcpu32/CMakeFiles/vcpu32_simulate.dir/clean
 vcpu32/clean: vcpu32/CMakeFiles/vcpu32_waveform.dir/clean
 .PHONY : vcpu32/clean
 
@@ -156,36 +156,36 @@ vcpu32/CMakeFiles/vcpu32_compile.dir/clean:
 .PHONY : vcpu32/CMakeFiles/vcpu32_compile.dir/clean
 
 #=============================================================================
-# Target rules for target vcpu32/CMakeFiles/vcpu32_run.dir
+# Target rules for target vcpu32/CMakeFiles/vcpu32_simulate.dir
 
 # All Build rule for target.
-vcpu32/CMakeFiles/vcpu32_run.dir/all:
-	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_run.dir/build.make vcpu32/CMakeFiles/vcpu32_run.dir/depend
-	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_run.dir/build.make vcpu32/CMakeFiles/vcpu32_run.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=5 "Built target vcpu32_run"
-.PHONY : vcpu32/CMakeFiles/vcpu32_run.dir/all
+vcpu32/CMakeFiles/vcpu32_simulate.dir/all: vcpu32/CMakeFiles/vcpu32_compile.dir/all
+	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_simulate.dir/build.make vcpu32/CMakeFiles/vcpu32_simulate.dir/depend
+	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_simulate.dir/build.make vcpu32/CMakeFiles/vcpu32_simulate.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=5 "Built target vcpu32_simulate"
+.PHONY : vcpu32/CMakeFiles/vcpu32_simulate.dir/all
 
 # Build rule for subdir invocation for target.
-vcpu32/CMakeFiles/vcpu32_run.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 1
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32/CMakeFiles/vcpu32_run.dir/all
+vcpu32/CMakeFiles/vcpu32_simulate.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32/CMakeFiles/vcpu32_simulate.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 0
-.PHONY : vcpu32/CMakeFiles/vcpu32_run.dir/rule
+.PHONY : vcpu32/CMakeFiles/vcpu32_simulate.dir/rule
 
 # Convenience name for target.
-vcpu32_run: vcpu32/CMakeFiles/vcpu32_run.dir/rule
-.PHONY : vcpu32_run
+vcpu32_simulate: vcpu32/CMakeFiles/vcpu32_simulate.dir/rule
+.PHONY : vcpu32_simulate
 
 # clean rule for target.
-vcpu32/CMakeFiles/vcpu32_run.dir/clean:
-	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_run.dir/build.make vcpu32/CMakeFiles/vcpu32_run.dir/clean
-.PHONY : vcpu32/CMakeFiles/vcpu32_run.dir/clean
+vcpu32/CMakeFiles/vcpu32_simulate.dir/clean:
+	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_simulate.dir/build.make vcpu32/CMakeFiles/vcpu32_simulate.dir/clean
+.PHONY : vcpu32/CMakeFiles/vcpu32_simulate.dir/clean
 
 #=============================================================================
 # Target rules for target vcpu32/CMakeFiles/vcpu32_waveform.dir
 
 # All Build rule for target.
-vcpu32/CMakeFiles/vcpu32_waveform.dir/all:
+vcpu32/CMakeFiles/vcpu32_waveform.dir/all: vcpu32/CMakeFiles/vcpu32_simulate.dir/all
 	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_waveform.dir/build.make vcpu32/CMakeFiles/vcpu32_waveform.dir/depend
 	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_waveform.dir/build.make vcpu32/CMakeFiles/vcpu32_waveform.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=6 "Built target vcpu32_waveform"
@@ -193,7 +193,7 @@ vcpu32/CMakeFiles/vcpu32_waveform.dir/all:
 
 # Build rule for subdir invocation for target.
 vcpu32/CMakeFiles/vcpu32_waveform.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32/CMakeFiles/vcpu32_waveform.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 0
 .PHONY : vcpu32/CMakeFiles/vcpu32_waveform.dir/rule
@@ -237,7 +237,7 @@ test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/clean:
 # Target rules for target test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir
 
 # All Build rule for target.
-test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/all:
+test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/all: test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/all
 	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/build.make test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/depend
 	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/build.make test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=2 "Built target Module1_TB_simulate"
@@ -245,7 +245,7 @@ test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/all:
 
 # Build rule for subdir invocation for target.
 test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 2
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 0
 .PHONY : test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/rule
@@ -263,7 +263,7 @@ test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/clean:
 # Target rules for target test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir
 
 # All Build rule for target.
-test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/all:
+test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/all: test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/all
 	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/build.make test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/depend
 	$(MAKE) $(MAKESILENT) -f test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/build.make test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/build
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=3 "Built target Module1_TB_waveform"
@@ -271,7 +271,7 @@ test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/all:
 
 # Build rule for subdir invocation for target.
 test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 3
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 0
 .PHONY : test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/rule

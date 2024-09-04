@@ -130,17 +130,17 @@ vcpu32_compile/fast:
 .PHONY : vcpu32_compile/fast
 
 #=============================================================================
-# Target rules for targets named vcpu32_run
+# Target rules for targets named vcpu32_simulate
 
 # Build rule for target.
-vcpu32_run: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32_run
-.PHONY : vcpu32_run
+vcpu32_simulate: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 vcpu32_simulate
+.PHONY : vcpu32_simulate
 
 # fast build rule for target.
-vcpu32_run/fast:
-	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_run.dir/build.make vcpu32/CMakeFiles/vcpu32_run.dir/build
-.PHONY : vcpu32_run/fast
+vcpu32_simulate/fast:
+	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_simulate.dir/build.make vcpu32/CMakeFiles/vcpu32_simulate.dir/build
+.PHONY : vcpu32_simulate/fast
 
 #=============================================================================
 # Target rules for targets named vcpu32_waveform
@@ -206,7 +206,7 @@ help:
 	@echo "... Module1_TB_simulate"
 	@echo "... Module1_TB_waveform"
 	@echo "... vcpu32_compile"
-	@echo "... vcpu32_run"
+	@echo "... vcpu32_simulate"
 	@echo "... vcpu32_waveform"
 .PHONY : help
 

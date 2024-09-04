@@ -54,7 +54,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
   "vcpu32/CMakeFiles/vcpu32_compile.dir/DependInfo.cmake"
-  "vcpu32/CMakeFiles/vcpu32_run.dir/DependInfo.cmake"
+  "vcpu32/CMakeFiles/vcpu32_simulate.dir/DependInfo.cmake"
   "vcpu32/CMakeFiles/vcpu32_waveform.dir/DependInfo.cmake"
   "test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir/DependInfo.cmake"
   "test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir/DependInfo.cmake"

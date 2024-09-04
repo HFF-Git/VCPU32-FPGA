@@ -9,7 +9,7 @@
                 "--build",
                 ".",
                 "--target",
-                "vcpu32"
+                "vcpu32_compile"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/build"
@@ -28,7 +28,7 @@
                 "--build",
                 ".",
                 "--target",
-                "run_simulation"
+                "vcpu32_simulate"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/build"
@@ -43,7 +43,7 @@
                 "--build",
                 ".",
                 "--target",
-                "view_waveform"
+                "vcpu32_waveform"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/build"
@@ -58,7 +58,7 @@
                 "--build",
                 ".",
                 "--target",
-                "Module1_TB"
+                "Module1_TB_compile"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/build"
@@ -77,7 +77,7 @@
                 "--build",
                 ".",
                 "--target",
-                "run_simulation"
+                "Module1_TB_run"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/build"
@@ -92,7 +92,7 @@
                 "--build",
                 ".",
                 "--target",
-                "view_waveform"
+                "Module1_TB_waveform"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/build"

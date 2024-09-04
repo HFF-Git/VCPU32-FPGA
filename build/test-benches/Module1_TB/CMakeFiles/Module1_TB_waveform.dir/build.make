@@ -66,10 +66,10 @@ include test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/compiler_depe
 # Include the progress variables for this target.
 include test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/progress.make
 
-test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform: test-benches/Module1_TB/run_simulation
+test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Opening GTKWave to view the waveform"
-	vvp /Users/helmutfieres/GitHub/VCPU32-FPGA/build/$(PROJECT_NAME).out
-	gtkwave /Users/helmutfieres/GitHub/VCPU32-FPGA/build/$(PROJECT_NAME).vcd
+	vvp /Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/Module1_TB.out
+	gtkwave /Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/Module1_TB.vcd
 
 Module1_TB_waveform: test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform
 Module1_TB_waveform: test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir/build.make
