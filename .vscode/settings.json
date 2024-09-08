@@ -9,6 +9,7 @@
         "*.v": "verilog",
         "*.vh": "verilog"
     },
+   
     "cmake.generator": "Unix Makefiles",
     "cmake.buildDirectory": "${workspaceFolder}/build",
     "cmake.configureOnOpen": true

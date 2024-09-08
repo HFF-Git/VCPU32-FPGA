@@ -1,15 +1,18 @@
-module MuxTB(
+module Module1_TB(
 
 
 );
 
-// fix .... see ChatGPT discussion ....
+// ??? a bit ugly to specify the dedicated path. cmake offers a possibility to replace 
+// a token with cmae variables...
 
 initial begin
-    $dumpfile("@VCD_OUTPUT@");  // Placeholder for the VCD file name
-    $dumpvars(0, your_top_module);
+    $dumpfile("../../build/test-benches/Module1_TB/Module1_TB.vcd");  
+    $dumpvars(0, Module1_TB);
     // Other initialization code...
 end
+
+// add some coding to see vvp and vcd files being created....
 
 
 
