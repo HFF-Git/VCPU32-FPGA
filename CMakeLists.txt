@@ -14,5 +14,6 @@ cmake_minimum_required( VERSION 3.29 )
 project( VCPU32-FPGA )
 
 add_subdirectory( vcpu32 )
+add_subdirectory( test-benches/Vcpu32_TB)
 add_subdirectory( test-benches/Module1_TB )
 add_subdirectory( test-benches/Module2_TB )

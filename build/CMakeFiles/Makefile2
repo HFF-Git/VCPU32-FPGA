@@ -45,10 +45,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.30.3/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.30.2/bin/cmake
 
 # The command to remove a file.
-RM = /opt/homebrew/Cellar/cmake/3.30.3/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.30.2/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -64,18 +64,21 @@ CMAKE_BINARY_DIR = /Users/helmutfieres/GitHub/VCPU32-FPGA/build
 
 # The main recursive "all" target.
 all: vcpu32/all
+all: test-benches/Vcpu32_TB/all
 all: test-benches/Module1_TB/all
 all: test-benches/Module2_TB/all
 .PHONY : all
 
 # The main recursive "preinstall" target.
 preinstall: vcpu32/preinstall
+preinstall: test-benches/Vcpu32_TB/preinstall
 preinstall: test-benches/Module1_TB/preinstall
 preinstall: test-benches/Module2_TB/preinstall
 .PHONY : preinstall
 
 # The main recursive "clean" target.
 clean: vcpu32/clean
+clean: test-benches/Vcpu32_TB/clean
 clean: test-benches/Module1_TB/clean
 clean: test-benches/Module2_TB/clean
 .PHONY : clean
@@ -113,6 +116,23 @@ test-benches/Module2_TB/clean:
 .PHONY : test-benches/Module2_TB/clean
 
 #=============================================================================
+# Directory level rules for directory test-benches/Vcpu32_TB
+
+# Recursive "all" directory target.
+test-benches/Vcpu32_TB/all:
+.PHONY : test-benches/Vcpu32_TB/all
+
+# Recursive "preinstall" directory target.
+test-benches/Vcpu32_TB/preinstall:
+.PHONY : test-benches/Vcpu32_TB/preinstall
+
+# Recursive "clean" directory target.
+test-benches/Vcpu32_TB/clean: test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/clean
+test-benches/Vcpu32_TB/clean: test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/clean
+test-benches/Vcpu32_TB/clean: test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/clean
+.PHONY : test-benches/Vcpu32_TB/clean
+
+#=============================================================================
 # Directory level rules for directory vcpu32
 
 # Recursive "all" directory target.
@@ -136,7 +156,7 @@ vcpu32/clean: vcpu32/CMakeFiles/vcpu32_waveform.dir/clean
 vcpu32/CMakeFiles/vcpu32_compile.dir/all:
 	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_compile.dir/build.make vcpu32/CMakeFiles/vcpu32_compile.dir/depend
 	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_compile.dir/build.make vcpu32/CMakeFiles/vcpu32_compile.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=4 "Built target vcpu32_compile"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=7 "Built target vcpu32_compile"
 .PHONY : vcpu32/CMakeFiles/vcpu32_compile.dir/all
 
 # Build rule for subdir invocation for target.
@@ -162,7 +182,7 @@ vcpu32/CMakeFiles/vcpu32_compile.dir/clean:
 vcpu32/CMakeFiles/vcpu32_simulate.dir/all: vcpu32/CMakeFiles/vcpu32_compile.dir/all
 	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_simulate.dir/build.make vcpu32/CMakeFiles/vcpu32_simulate.dir/depend
 	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_simulate.dir/build.make vcpu32/CMakeFiles/vcpu32_simulate.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=5 "Built target vcpu32_simulate"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=8 "Built target vcpu32_simulate"
 .PHONY : vcpu32/CMakeFiles/vcpu32_simulate.dir/all
 
 # Build rule for subdir invocation for target.
@@ -188,7 +208,7 @@ vcpu32/CMakeFiles/vcpu32_simulate.dir/clean:
 vcpu32/CMakeFiles/vcpu32_waveform.dir/all: vcpu32/CMakeFiles/vcpu32_simulate.dir/all
 	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_waveform.dir/build.make vcpu32/CMakeFiles/vcpu32_waveform.dir/depend
 	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_waveform.dir/build.make vcpu32/CMakeFiles/vcpu32_waveform.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=6 "Built target vcpu32_waveform"
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=9 "Built target vcpu32_waveform"
 .PHONY : vcpu32/CMakeFiles/vcpu32_waveform.dir/all
 
 # Build rule for subdir invocation for target.
@@ -206,6 +226,84 @@ vcpu32_waveform: vcpu32/CMakeFiles/vcpu32_waveform.dir/rule
 vcpu32/CMakeFiles/vcpu32_waveform.dir/clean:
 	$(MAKE) $(MAKESILENT) -f vcpu32/CMakeFiles/vcpu32_waveform.dir/build.make vcpu32/CMakeFiles/vcpu32_waveform.dir/clean
 .PHONY : vcpu32/CMakeFiles/vcpu32_waveform.dir/clean
+
+#=============================================================================
+# Target rules for target test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir
+
+# All Build rule for target.
+test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/all:
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/depend
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=4 "Built target Vcpu32_TB_compile"
+.PHONY : test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/all
+
+# Build rule for subdir invocation for target.
+test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 1
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 0
+.PHONY : test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/rule
+
+# Convenience name for target.
+Vcpu32_TB_compile: test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/rule
+.PHONY : Vcpu32_TB_compile
+
+# clean rule for target.
+test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/clean
+.PHONY : test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/clean
+
+#=============================================================================
+# Target rules for target test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir
+
+# All Build rule for target.
+test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/all: test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/all
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/depend
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=5 "Built target Vcpu32_TB_simulate"
+.PHONY : test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/all
+
+# Build rule for subdir invocation for target.
+test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 2
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 0
+.PHONY : test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/rule
+
+# Convenience name for target.
+Vcpu32_TB_simulate: test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/rule
+.PHONY : Vcpu32_TB_simulate
+
+# clean rule for target.
+test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/clean
+.PHONY : test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/clean
+
+#=============================================================================
+# Target rules for target test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir
+
+# All Build rule for target.
+test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/all: test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/all
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/depend
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=6 "Built target Vcpu32_TB_waveform"
+.PHONY : test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/all
+
+# Build rule for subdir invocation for target.
+test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 3
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles 0
+.PHONY : test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/rule
+
+# Convenience name for target.
+Vcpu32_TB_waveform: test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/rule
+.PHONY : Vcpu32_TB_waveform
+
+# clean rule for target.
+test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/clean:
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/clean
+.PHONY : test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/clean
 
 #=============================================================================
 # Target rules for target test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir

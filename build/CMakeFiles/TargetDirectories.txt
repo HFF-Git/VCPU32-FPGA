@@ -5,6 +5,11 @@
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/CMakeFiles/vcpu32_waveform.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/CMakeFiles/edit_cache.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/CMakeFiles/rebuild_cache.dir
+/Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir
+/Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir
+/Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir
+/Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Vcpu32_TB/CMakeFiles/edit_cache.dir
+/Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Vcpu32_TB/CMakeFiles/rebuild_cache.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/CMakeFiles/Module1_TB_compile.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/CMakeFiles/Module1_TB_simulate.dir
 /Users/helmutfieres/GitHub/VCPU32-FPGA/build/test-benches/Module1_TB/CMakeFiles/Module1_TB_waveform.dir

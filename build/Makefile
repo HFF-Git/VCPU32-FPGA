@@ -48,10 +48,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.30.3/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.30.2/bin/cmake
 
 # The command to remove a file.
-RM = /opt/homebrew/Cellar/cmake/3.30.3/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.30.2/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -78,7 +78,7 @@ edit_cache/fast: edit_cache
 # Special rule for the target rebuild_cache
 rebuild_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --cyan "Running CMake to regenerate build system..."
-	/opt/homebrew/Cellar/cmake/3.30.3/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/opt/homebrew/Cellar/cmake/3.30.2/bin/cmake --regenerate-during-build -S$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : rebuild_cache
 
 # Special rule for the target rebuild_cache
@@ -156,6 +156,45 @@ vcpu32_waveform/fast:
 .PHONY : vcpu32_waveform/fast
 
 #=============================================================================
+# Target rules for targets named Vcpu32_TB_compile
+
+# Build rule for target.
+Vcpu32_TB_compile: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Vcpu32_TB_compile
+.PHONY : Vcpu32_TB_compile
+
+# fast build rule for target.
+Vcpu32_TB_compile/fast:
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_compile.dir/build
+.PHONY : Vcpu32_TB_compile/fast
+
+#=============================================================================
+# Target rules for targets named Vcpu32_TB_simulate
+
+# Build rule for target.
+Vcpu32_TB_simulate: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Vcpu32_TB_simulate
+.PHONY : Vcpu32_TB_simulate
+
+# fast build rule for target.
+Vcpu32_TB_simulate/fast:
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_simulate.dir/build
+.PHONY : Vcpu32_TB_simulate/fast
+
+#=============================================================================
+# Target rules for targets named Vcpu32_TB_waveform
+
+# Build rule for target.
+Vcpu32_TB_waveform: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 Vcpu32_TB_waveform
+.PHONY : Vcpu32_TB_waveform
+
+# fast build rule for target.
+Vcpu32_TB_waveform/fast:
+	$(MAKE) $(MAKESILENT) -f test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/build.make test-benches/Vcpu32_TB/CMakeFiles/Vcpu32_TB_waveform.dir/build
+.PHONY : Vcpu32_TB_waveform/fast
+
+#=============================================================================
 # Target rules for targets named Module1_TB_compile
 
 # Build rule for target.
@@ -205,6 +244,9 @@ help:
 	@echo "... Module1_TB_compile"
 	@echo "... Module1_TB_simulate"
 	@echo "... Module1_TB_waveform"
+	@echo "... Vcpu32_TB_compile"
+	@echo "... Vcpu32_TB_simulate"
+	@echo "... Vcpu32_TB_waveform"
 	@echo "... vcpu32_compile"
 	@echo "... vcpu32_simulate"
 	@echo "... vcpu32_waveform"
