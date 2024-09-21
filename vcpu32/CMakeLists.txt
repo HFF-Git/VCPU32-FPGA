@@ -15,6 +15,10 @@ set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/vcpu32)
 
 set(VERILOG_SOURCES
 
+    ${CMAKE_SOURCE_DIR}/vcpu32/defines.vh
+    ${CMAKE_SOURCE_DIR}/vcpu32/util.v
+    ${CMAKE_SOURCE_DIR}/vcpu32/aluUnit.v
+    ${CMAKE_SOURCE_DIR}/vcpu32/shiftMergeUnit.v
     ${CMAKE_SOURCE_DIR}/vcpu32/registerFile.v
     ${CMAKE_SOURCE_DIR}/vcpu32/vcpu32.v
 )

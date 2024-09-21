@@ -5,16 +5,15 @@
 //  Copyright (C) 2022 - 2024 Helmut Fieres, see License file.
 //------------------------------------------------------------------------------------------------------------
 // 
-// - contains a lot of modules in one file...
-// - test benches are however separate...
 //
 //
 //------------------------------------------------------------------------------------------------------------
-`ifndef DEFINES_VH
-`define DEFINES_VH
+`include "defines.vh"
 
-`define HUGO 1
+module shiftMergeUnit( 
 
-`define WORD_LENGTH 32
 
-`endif // DEFINES_VH
+);
+
+
+endmodule
