@@ -38,23 +38,27 @@ module register_file_1R_1W #(
     reg     [WIDTH-1:0] regFile [$clog2(SIZE)-1:0];
     integer             i;
 
+    assign zeroValue = {WIDTH{1'b0}};
+
     always @(posedge clk or negedge rst) begin
 
         if (!rst) begin
             
             for ( i = 0; i < SIZE; i = i + 1 ) begin
-                regFile[i] <= 32'b0;
+                regFile[i] <= zeroValue;
             end
         end else begin
             
             if ( writeEnable1 ) begin
-                regFile[writeAddr1] <= writeData1;
+
+                if ( writeAddr1 != 0 ) regFile[writeAddr1] <= writeData1;
             end
         end
     end
 
     always @(*) begin
-        readData1 = regFile[ readAddr1 ];
+        
+        readData1 = ( readAddr1 == 0 ) ? regFile[ readAddr1 ] : zeroValue;
     end
 
 endmodule
@@ -89,28 +93,28 @@ module register_file_2R_1W #(
     reg [WIDTH-1:0] regFile [$clog2(SIZE)-1:0];
     integer         i;
 
+    assign zeroValue = {WIDTH{1'b0}};
+
     always @( posedge clk or negedge rst ) begin
 
         if ( !rst ) begin
 
             for ( i = 0; i < SIZE; i = i + 1 ) begin
-                regFile[i] <= 32'b0;
+                regFile[i] <= zeroValue;
             end
         
         end else begin
             
             if ( writeEnable1 ) begin
-                regFile[ writeAddr1 ] <= writeData1;
+                if ( writeAddr1 != 0 ) regFile[ writeAddr1 ] <= writeData1;
             end
         end
     end
 
     always @(*) begin
-        readData1 = regFile[ readAddr1];
-    end
 
-    always @(*) begin
-        readData2 = regFile[ readAddr2 ];
+        readData1 = ( readAddr1 != 0 ) ? regFile[ readAddr1 ] : zeroValue;
+        readData2 = ( readAddr2 != 0 ) ? regFile[ readAddr2 ] : zeroValue;
     end
 
 endmodule
@@ -153,36 +157,33 @@ module register_file_3R_2W #(
     reg [WIDTH-1:0] regFile [$clog2(SIZE)-1:0];
     integer         i;
 
+    assign zeroValue = {WIDTH{1'b0}};
+
     always @( posedge clk or negedge rst ) begin
 
         if ( !rst ) begin
 
             for ( i = 0; i < SIZE; i = i + 1 ) begin
-                regFile[i] <= 32'b0;
+                regFile[i] <= zeroValue;
             end
         
         end else begin
             
             if ( writeEnable1 ) begin
-                regFile[ writeAddr1 ] <= writeData1;
+                if ( writeAddr1 != 0 ) regFile[ writeAddr1 ] <= writeData1;
             end
 
-            if ( writeEnable2 && ! ( writeEnable1 && ( writeAddr1 == writeAddr2 ))) begin
-                regFile[ writeAddr2 ] <= writeData2;
+            if ( writeEnable2 && ( ! ( writeEnable1 && ( writeAddr1 == writeAddr2 )))) begin
+                if ( writeAddr1 != 0 ) regFile[ writeAddr2 ] <= writeData2;
             end
         end
     end
 
     always @(*) begin
-        readData1 = regFile[ readAddr1];
-    end
 
-    always @(*) begin
-        readData2 = regFile[ readAddr2 ];
-    end
-
-    always @(*) begin
-        readData3 = regFile[ readAddr3 ];
+        readData1 = ( readAddr1 != 0 ) ? regFile[ readAddr1 ] : zeroValue;
+        readData2 = ( readAddr2 != 0 ) ? regFile[ readAddr2 ] : zeroValue;
+        readData3 = ( readAddr2 != 0 ) ? regFile[ readAddr3 ] : zeroValue;
     end
 
 endmodule

@@ -44,10 +44,10 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.30.3/bin/cmake
+CMAKE_COMMAND = /opt/homebrew/Cellar/cmake/3.30.2/bin/cmake
 
 # The command to remove a file.
-RM = /opt/homebrew/Cellar/cmake/3.30.3/bin/cmake -E rm -f
+RM = /opt/homebrew/Cellar/cmake/3.30.2/bin/cmake -E rm -f
 
 # Escaping for special characters.
 EQUALS = =
@@ -68,12 +68,16 @@ include vcpu32/CMakeFiles/vcpu32_compile.dir/progress.make
 
 vcpu32/CMakeFiles/vcpu32_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/defines.vh
 vcpu32/CMakeFiles/vcpu32_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/util.v
-vcpu32/CMakeFiles/vcpu32_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/aluUnit.v
+vcpu32/CMakeFiles/vcpu32_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/FetchDecodeStage.v
+vcpu32/CMakeFiles/vcpu32_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/MemoryAccessStage.v
+vcpu32/CMakeFiles/vcpu32_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/ExecuteStage.v
+vcpu32/CMakeFiles/vcpu32_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/cache.v
+vcpu32/CMakeFiles/vcpu32_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/tlb.v
 vcpu32/CMakeFiles/vcpu32_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/shiftMergeUnit.v
 vcpu32/CMakeFiles/vcpu32_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/registerFile.v
 vcpu32/CMakeFiles/vcpu32_compile: /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/vcpu32.v
 	@$(CMAKE_COMMAND) -E cmake_echo_color "--switch=$(COLOR)" --blue --bold --progress-dir=/Users/helmutfieres/GitHub/VCPU32-FPGA/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Compiling Verilog code with Icarus Verilog"
-	cd /Users/helmutfieres/GitHub/VCPU32-FPGA && iverilog -g2012 -I/Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32 -o /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/vcpu32.out /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/defines.vh /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/util.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/aluUnit.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/shiftMergeUnit.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/registerFile.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/vcpu32.v
+	cd /Users/helmutfieres/GitHub/VCPU32-FPGA && iverilog -g2012 -I/Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32 -o /Users/helmutfieres/GitHub/VCPU32-FPGA/build/vcpu32/vcpu32.out /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/defines.vh /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/util.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/FetchDecodeStage.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/MemoryAccessStage.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/ExecuteStage.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/cache.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/tlb.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/shiftMergeUnit.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/registerFile.v /Users/helmutfieres/GitHub/VCPU32-FPGA/vcpu32/vcpu32.v
 
 vcpu32_compile: vcpu32/CMakeFiles/vcpu32_compile
 vcpu32_compile: vcpu32/CMakeFiles/vcpu32_compile.dir/build.make
