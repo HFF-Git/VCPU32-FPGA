@@ -13,7 +13,11 @@
 
 
 //------------------------------------------------------------------------------------------------------------
-//
+// Register file unit for one read and one write port. It is the building block for the general register set
+// and segment register set. The register file unit supports two modes. The normal mode is a register with a
+// parallel input and output, set at the positive edge of the clock. In addition, there is a serial interface
+// for reading the registers as a serial bit stream for analysis and diagnostics. As the bit vector could be
+// quite large, a simple state machine will shift the data on a word by basis.
 //
 //------------------------------------------------------------------------------------------------------------
 module register_file_1R_1W #( 
@@ -31,12 +35,21 @@ module register_file_1R_1W #(
 
     input  logic                    writeEnable1,                        
     input  logic [$clog2(SIZE)-1:0] writeAddr1,        
-    input  logic [WIDTH-1:0]        writeData1            
+    input  logic [WIDTH-1:0]        writeData1,
+
+    input    wire                   sClock,
+    input    wire                   sEnable,
+    input    wire                   sIn,
+    output   reg                    sOut            
     
     );
 
-    reg     [WIDTH-1:0] regFile [$clog2(SIZE)-1:0];
-    integer             i;
+    reg [WIDTH-1:0]                 regFile [$clog2(SIZE)-1:0];
+    reg [$clog2(SIZE)-1:0]          shiftAdr;
+    reg [SIZE-1:0]                  shiftReg;
+    reg [$clog2(WIDTH)-1:0]         shiftCnt;
+
+    integer                         i;
 
     assign zeroValue = {WIDTH{1'b0}};
 
@@ -61,12 +74,47 @@ module register_file_1R_1W #(
         readData1 = ( readAddr1 == 0 ) ? regFile[ readAddr1 ] : zeroValue;
     end
 
+    always @( posedge sClock ) begin
+
+        if ( sEnable ) begin
+
+            if ( shiftCnt == 0 ) begin
+      
+                shiftReg <= regFile[ shiftCnt ];
+                sOut     <= shiftReg[ 0 ];
+                shiftReg <= shiftReg << 1;
+                shiftCnt <= 1;
+
+            end else if ( shiftCnt < WIDTH ) begin
+
+                sOut     <= shiftReg[ 0 ];
+                shiftReg <= { sIn, shiftReg[ 1:SIZE-1] };
+                shiftCnt <= shiftCnt +1; 
+
+            end else begin
+
+                regFile[ shiftAdr ]  <= { sIn, shiftReg[1:SIZE-1]};
+                shiftCnt             <= 0;
+
+                if ( shiftAdr < SIZE -1 )  shiftAdr <= shiftAdr + 1;
+                else                       shiftAdr <= 0;
+         
+            end
+
+        end
+   
+     end
+
 endmodule
 
+
 //------------------------------------------------------------------------------------------------------------
+// Register file unit for two read and one write port. It is the building block for the general register set
+// and segment register set. The register file unit supports two modes. The normal mode is a register with a
+// parallel input and output, set at the positive edge of the clock. In addition, there is a serial interface
+// for reading the registers as a serial bit stream for analysis and diagnostics. As the bit vector could be
+// quite large, a simple state machine will shift the data on a word by basis.
 //
-//
-// 
 //------------------------------------------------------------------------------------------------------------
 module register_file_2R_1W #( 
 
@@ -86,12 +134,21 @@ module register_file_2R_1W #(
 
     input logic                     writeEnable1,          
     input logic [$clog2(SIZE)-1:0]  writeAddr1,      
-    input logic [WIDTH-1:0]         writeData1   
+    input logic [WIDTH-1:0]         writeData1,
+
+    input    wire                   sClock,
+    input    wire                   sEnable,
+    input    wire                   sIn,
+    output   reg                    sOut   
   
     );
 
-    reg [WIDTH-1:0] regFile [$clog2(SIZE)-1:0];
-    integer         i;
+    reg [WIDTH-1:0]                 regFile [$clog2(SIZE)-1:0];
+    reg [$clog2(SIZE)-1:0]          shiftAdr;
+    reg [SIZE-1:0]                  shiftReg;
+    reg [$clog2(WIDTH)-1:0]         shiftCnt;
+
+    integer                         i;
 
     assign zeroValue = {WIDTH{1'b0}};
 
@@ -117,13 +174,19 @@ module register_file_2R_1W #(
         readData2 = ( readAddr2 != 0 ) ? regFile[ readAddr2 ] : zeroValue;
     end
 
+
+
+
 endmodule
 
 //------------------------------------------------------------------------------------------------------------
+// Register file unit for three read and two write ports. The read operation is an asynchronous operation.
+// The write operation is synchronous. When the two wrote addresses are the same, write port 1 has priority.
+// The register file unit supports two modes. The normal mode is a register  with a parallel input and output,
+// set at the positive edge of the clock. In addition, there is a serial interface for reading the registers 
+// as a serial bit stream for analysis and diagnostics. As the bit vector could be quite large, a simple state
+// machine will shift the data on a word by word basis. 
 //
-//
-// write port one has higher pri
-// Write port 2 writes if write_enable_1 did not write to the same register
 //------------------------------------------------------------------------------------------------------------
 module register_file_3R_2W #( 
 
@@ -150,12 +213,21 @@ module register_file_3R_2W #(
 
     input logic                     writeEnable2,          
     input logic [$clog2(SIZE)-1:0]  writeAddr2,      
-    input logic [WIDTH-1:0]         writeData2      
+    input logic [WIDTH-1:0]         writeData2,
+
+    input    wire                   sClock,
+    input    wire                   sEnable,
+    input    wire                   sIn,
+    output   reg                    sOut      
     
     );
+    
+    reg [WIDTH-1:0]                 regFile [$clog2(SIZE)-1:0];
+    reg [$clog2(SIZE)-1:0]          shiftAdr;
+    reg [SIZE-1:0]                  shiftReg;
+    reg [$clog2(WIDTH)-1:0]         shiftCnt;
 
-    reg [WIDTH-1:0] regFile [$clog2(SIZE)-1:0];
-    integer         i;
+    integer                         i;
 
     assign zeroValue = {WIDTH{1'b0}};
 
@@ -187,4 +259,3 @@ module register_file_3R_2W #(
     end
 
 endmodule
-
