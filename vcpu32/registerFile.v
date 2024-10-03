@@ -37,10 +37,10 @@ module register_file_1R_1W #(
     input  logic [$clog2(SIZE)-1:0] writeAddr1,        
     input  logic [WIDTH-1:0]        writeData1,
 
-    input    wire                   sClock,
-    input    wire                   sEnable,
-    input    wire                   sIn,
-    output   reg                    sOut            
+    input  logic                    sClock,
+    input  logic                    sEnable,
+    input  logic                    sIn,
+    output logic                    sOut            
     
     );
 

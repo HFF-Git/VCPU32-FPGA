@@ -27,16 +27,17 @@ module ScanRegUnit #(
 
     ) (
 
-    input    wire                       inClk,
-    input    wire                       inRst,
-    input    wire[`WORD_LENGTH-1:0]     d,
+    input   logic                       inClk,
+    input   logic                       inRst,
+    inout   logic                       wEnable,
+    input   logic[`WORD_LENGTH-1:0]     d,
 
-    output   reg[`WORD_LENGTH-1:0]      q,
+    output   logic[`WORD_LENGTH-1:0]    q,
     
-    input    wire                       sClock,
-    input    wire                       sEnable,
-    input    wire                       sIn,
-    output   reg                        sOut
+    input    logic                      sClock,
+    input    logic                      sEnable,
+    input    logic                      sIn,
+    output   logic                      sOut
 
     );
 
