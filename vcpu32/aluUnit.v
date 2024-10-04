@@ -116,8 +116,6 @@ endmodule
 
 
 
-
-
 //------------------------------------------------------------------------------------------------------------
 // The logic unit implements the  logical functions of the CPU. The implementation is essentially a lookup 
 // table for the function map and a 4:1 multiplexer that selects the respective function result for a bit 
@@ -159,5 +157,54 @@ module logicUnit  #(
    end
 
 endmodule
+
+
+//------------------------------------------------------------------------------------------------------------
+//
+//
+// ??? rework.....
+//------------------------------------------------------------------------------------------------------------
+
+module extract (
+    input  [31:0] data_in,   // Input data
+    input  [4:0]  pos,       // Position (starting bit)
+    input  [4:0]  len,       // Length (number of bits)
+    output [31:0] data_out   // Output data
+);
+    reg [31:0] temp;
+
+    always @(*) begin
+        if (len == 0)
+            temp = 32'b0;
+        else
+            temp = (data_in >> pos) & ((1 << len) - 1);
+    end
+
+    assign data_out = temp;
+endmodule
+
+module deposit (
+    input  [31:0] data_in,   // Input data
+    input  [4:0]  pos,       // Position (starting bit)
+    input  [4:0]  len,       // Length (number of bits)
+    input  [31:0] data_orig, // Original data (to be partially overwritten)
+    output [31:0] data_out   // Output data
+);
+    reg [31:0] mask;
+    reg [31:0] temp;
+
+    always @(*) begin
+        if (len == 0) begin
+            mask = 32'b0;
+            temp = data_orig;
+        end else begin
+            mask = ((1 << len) - 1) << pos;
+            temp = (data_orig & ~mask) | ((data_in << pos) & mask);
+        end
+    end
+
+    assign data_out = temp;
+endmodule
+
 
 
