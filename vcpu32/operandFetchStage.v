@@ -27,7 +27,7 @@
 //
 // ??? all in one module ?
 //------------------------------------------------------------------------------------------------------------
-module MemoryAccessStage( 
+module OperandFetchStage ( 
    
    input  logic                   inClk,
    input  logic                   inRst, 
@@ -60,7 +60,7 @@ module MemoryAccessStage(
 
 endmodule
 
-module AdrSelect( 
+module AdrSelect ( 
 
 
 );
