@@ -11,7 +11,8 @@
 `include "defines.vh"
 
 
-
+//------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------
 module AluUnit( 
 
 
@@ -21,7 +22,8 @@ module AluUnit(
 endmodule
 
 
-
+//------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------
 module ShiftMergeUnit( 
 
 
@@ -116,6 +118,56 @@ endmodule
 
 
 
+//------------------------------------------------------------------------------------------------------------
+// The Adder is a simple adder of two unsigned numbers including a carry in for multi-precision arithmetic.  
+// Any interpretation of signd or unsigned must be handled in the instantiating layer. The Adder unit is
+// implemented in behavioral verilog. There is also a version which explicitly implements a carry lookahead
+// adder.
+//
+//------------------------------------------------------------------------------------------------------------
+module AdderUnit #( 
+
+   parameter WIDTH = `WORD_LENGTH
+
+   ) ( 
+
+   input    wire[0:WIDTH-1]   a, 
+   input    wire[0:WIDTH-1]   b, 
+   input    wire              inC,
+  
+   output   wire[0:WIDTH-1]   s,
+   output   wire              outC
+
+   );
+
+   assign { outC, s } = a + b + inC;
+
+endmodule
+
+//------------------------------------------------------------------------------------------------------------
+// The Incrementer unit is a simple adder of two unsigned numbers including a carry in for multi-precision
+// arithmetic. Any interpretation of signd or unsigned must be handled in the instantiating layer. The unit
+// is implemented in behavioral verilog.
+//
+//------------------------------------------------------------------------------------------------------------
+module IncrementerUnit #( 
+
+   parameter WIDTH = 32,
+   parameter AMT   = 1
+
+   ) (
+   
+   input    wire[0:WIDTH-1]   a,
+
+   output   wire[0:WIDTH-1]   s,
+   output   wire              outC
+
+   );
+
+   assign { outC, s } = a + AMT;
+   
+endmodule
+
 
 
 //------------------------------------------------------------------------------------------------------------
@@ -126,38 +178,124 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 module logicUnit  #( 
 
-   parameter WIDTH = `WORD_LENGTH
+    parameter WIDTH = `WORD_LENGTH
 
-   ) ( 
+    ) ( 
 
-      input wire[0:WIDTH-1]  a,
-      input wire[0:WIDTH-1]  b,
-      input wire[0:2]        op,
-      output reg[0:WIDTH-1]  y
-   );
+        input  logic[WIDTH-1:0]   a,
+        input  logic[WIDTH-1:0]   b,
+        input  ogic[0:2]          op,
+        output logic[WIDTH-1:0]   y
+    );
 
-   reg  [0:3] map;
+    reg  [0:3] map;
 
-   always @(*) begin
+    always @(*) begin
     
-      case ( op ) 
+        case ( op ) 
 
-         `LOP_AND:   map = 4'b0001;   
-         `LOP_CAND:  map = 4'b0010;  
-         `LOP_XOR:   map = 4'b0110;   
-         `LOP_OR:    map = 4'b0111;  
-         `LOP_NAND:  map = 4'b1110;  
-         `LOP_COR:   map = 4'b1011;   
-         `LOP_XNOR:  map = 4'b1001;  
-         `LOP_NOR:   map = 4'b1000;   
-         default:    map = 4'b0000;
+            `LOP_AND:   map = 4'b0001;   
+            `LOP_CAND:  map = 4'b0010;  
+            `LOP_XOR:   map = 4'b0110;   
+            `LOP_OR:    map = 4'b0111;  
+            `LOP_NAND:  map = 4'b1110;  
+            `LOP_COR:   map = 4'b1011;   
+            `LOP_XNOR:  map = 4'b1001;  
+            `LOP_NOR:   map = 4'b1000;   
+            default:    map = 4'b0000;
 
-      endcase
+        endcase
 
-      for ( integer i = 0; i < WIDTH; i = i + 1 ) y[i] = map[{a[i], b[i]}];
+        for ( integer i = 0; i < WIDTH; i = i + 1 ) y[i] = map[{a[i], b[i]}];
 
-   end
+    end
 
 endmodule
+
+
+//------------------------------------------------------------------------------------------------------------
+//
+//
+//------------------------------------------------------------------------------------------------------------
+module extractUnit( 
+
+    input   logic[`WIDTH-1:0]   valIn,
+    input   logic[4:0]          pos,
+    input   logic[4:0]          len,
+    input   logic               sign,
+
+    output  logic[`WIDTH-1:0]   valOut
+
+    );
+
+
+
+endmodule
+
+
+//------------------------------------------------------------------------------------------------------------
+//
+//
+//------------------------------------------------------------------------------------------------------------
+module depositUnit( 
+
+    input   logic[`WIDTH-1:0]   valIn,
+    input   logic[4:0]          pos,
+    input   logic[4:0]          len,
+    
+    output  logic[`WIDTH-1:0]   valOut
+
+    );
+
+
+
+endmodule
+
+
+//------------------------------------------------------------------------------------------------------------
+// Double Shift Unit. The unit takes two words, A and B, concatenates them and performs a logical shift right
+// operation. We implement a barrel shifter type unit using 4 and 2 way multiplexers.
+//
+// ??? rework ....
+//------------------------------------------------------------------------------------------------------------
+module doubleShiftUnit (
+
+   input    wire[0:31]  a,
+   input    wire[0:31]  b,
+   input    wire[0:4]   sa,
+
+   output   wire[0:31]  y
+
+   );
+
+   wire[0:63] w1, w2, w3, w4;
+
+   assign w1 = { a, b };
+   assign y  = w4[`WORD_LENGTH:`DBL_WORD_LENGTH-1];
+
+   Mux_4_1 #( .WIDTH( `DBL_WORD_LENGTH )) U0 (  .a0( w1 ), 
+                                                .a1( { 8'b0,  w1[0:64 - 8  - 1] } ), 
+                                                .a2( { 16'b0, w1[0:64 - 16 - 1] } ), 
+                                                .a3( { 32'b0, w1[0:64 - 32 - 1] } ),
+                                                .sel( sa[ 0:1 ] ), 
+                                                .enb( 1'b1 ),
+                                                .y( w2 ));
+
+   Mux_4_1 #( .WIDTH( `DBL_WORD_LENGTH )) U1 (  .a0( w2 ), 
+                                                .a1( { 2'b0, w2[0:64 - 2 - 1] } ), 
+                                                .a2( { 4'b0, w2[0:64 - 4 - 1] } ), 
+                                                .a3( { 6'b0, w2[0:64 - 6 - 1] } ), 
+                                                .sel( sa[2:3] ),
+                                                .enb( 1'b1 ), 
+                                                .y( w3 ));
+
+   Mux_2_1 #( .WIDTH( `DBL_WORD_LENGTH )) U2 (  .a0( w3 ), 
+                                                .a1( { 1'b0, w3[0:64 - 1 - 1 ] } ), 
+                                                .sel( sa[4] ),
+                                                .enb( 1'b1 ), 
+                                                .y( w4 ));
+
+endmodule
+
 
 
