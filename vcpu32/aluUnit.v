@@ -181,7 +181,7 @@ module logicUnit  #(
 
         input  logic[WIDTH-1:0]   a,
         input  logic[WIDTH-1:0]   b,
-        input  ogic[0:2]          op,
+        input  logic[0:2]         op,
         output logic[WIDTH-1:0]   y
     );
 
@@ -213,46 +213,32 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 //
 //
-// ??? rework.....
 //------------------------------------------------------------------------------------------------------------
+module extractUnit32( 
 
-module extract (
-    
-    input  [31:0] data_in,   // Input data
-    input  [4:0]  pos,       // Position (starting bit)
-    input  [4:0]  len,       // Length (number of bits)
-    output [31:0] data_out   // Output data
-    
+    input   logic[31:0]   valIn,
+    input   logic[4:0]    pos,
+    input   logic[4:0]    len,
+    input   logic         sign,
+
+    output  logic[31:0]   valOut
+
     );
 
     reg [31:0] temp;
 
     always @(*) begin
+
         if (len == 0)
             temp = 32'b0;
         else
-            temp = (data_in >> pos) & ((1 << len) - 1);
+            temp = ( valIn >> ( 31 - pos )) & ((1 << len) - 1 );
+
+        // ??? sign extension ?
+    
     end
 
-    assign data_out = temp;
-
-endmodule
-
-
-
-//------------------------------------------------------------------------------------------------------------
-module extractUnit( 
-
-    input   logic[`WIDTH-1:0]   valIn,
-    input   logic[4:0]          pos,
-    input   logic[4:0]          len,
-    input   logic               sign,
-
-    output  logic[`WIDTH-1:0]   valOut
-
-    );
-
-
+    assign valOut = temp;
 
 endmodule
 
@@ -261,41 +247,34 @@ endmodule
 //
 //
 //------------------------------------------------------------------------------------------------------------
-module depositUnit( 
+module depositUnit32( 
 
-    input   logic[`WIDTH-1:0]   valIn,
-    input   logic[4:0]          pos,
-    input   logic[4:0]          len,
+    input   logic[31:0]     valIn,
+    input   logic[31-1:0]   valArg,
+    input   logic[4:0]      pos,
+    input   logic[4:0]      len,
     
-    output  logic[`WIDTH-1:0]   valOut
+    output  logic[31-1:0]   valOut
 
     );
 
-
-
-endmodule
-
-module deposit (
-    input  [31:0] data_in,   // Input data
-    input  [4:0]  pos,       // Position (starting bit)
-    input  [4:0]  len,       // Length (number of bits)
-    input  [31:0] data_orig, // Original data (to be partially overwritten)
-    output [31:0] data_out   // Output data
-);
-    reg [31:0] mask;
-    reg [31:0] temp;
-
+    reg [31:0] mask, temp;
+   
     always @(*) begin
-        if (len == 0) begin
+
+        if ( len == 0 ) begin
+
             mask = 32'b0;
-            temp = data_orig;
+            temp = valIn;
+        
         end else begin
-            mask = ((1 << len) - 1) << pos;
-            temp = (data_orig & ~mask) | ((data_in << pos) & mask);
+            
+            mask = ((1 << len) - 1 ) << ( 31 - pos );
+            temp = ( valIn & ~mask ) | ( valArg << (( 31- pos ) & mask ));
         end
     end
 
-    assign data_out = temp;
+    assign valOut = temp;
 
 endmodule
 
@@ -306,42 +285,42 @@ endmodule
 //
 // ??? rework ....
 //------------------------------------------------------------------------------------------------------------
-module doubleShiftUnit (
+module doubleShiftUnit64 (
 
-   input    wire[0:31]  a,
-   input    wire[0:31]  b,
-   input    wire[0:4]   sa,
+   input    logic[31:0]  a,
+   input    logic[31:0]  b,
+   input    logic[5:0]   sa,
 
-   output   wire[0:31]  y
+   output   logic[31:0]  y
 
    );
 
-   wire[0:63] w1, w2, w3, w4;
+   logic[63:0] w1, w2, w3, w4;
 
    assign w1 = { a, b };
-   assign y  = w4[`WORD_LENGTH:`DBL_WORD_LENGTH-1];
+   assign y  = w4[31:0];
 
-   Mux_4_1 #( .WIDTH( `DBL_WORD_LENGTH )) U0 (  .a0( w1 ), 
-                                                .a1( { 8'b0,  w1[0:64 - 8  - 1] } ), 
-                                                .a2( { 16'b0, w1[0:64 - 16 - 1] } ), 
-                                                .a3( { 32'b0, w1[0:64 - 32 - 1] } ),
-                                                .sel( sa[ 0:1 ] ), 
-                                                .enb( 1'b1 ),
-                                                .y( w2 ));
+   Mux_4_1 #( .WIDTH( 64 )) U0  (   .a0( w1 ), 
+                                    .a1( { 8'b0,  w1[63:8 ] } ), 
+                                    .a2( { 16'b0, w1[63:16] } ), 
+                                    .a3( { 32'b0, w1[63:32] } ),
+                                    .sel( sa[5:4] ), 
+                                    .enb( 1'b1 ),
+                                    .y( w2 ));
 
-   Mux_4_1 #( .WIDTH( `DBL_WORD_LENGTH )) U1 (  .a0( w2 ), 
-                                                .a1( { 2'b0, w2[0:64 - 2 - 1] } ), 
-                                                .a2( { 4'b0, w2[0:64 - 4 - 1] } ), 
-                                                .a3( { 6'b0, w2[0:64 - 6 - 1] } ), 
-                                                .sel( sa[2:3] ),
-                                                .enb( 1'b1 ), 
-                                                .y( w3 ));
+   Mux_4_1 #( .WIDTH( 64 )) U1  (   .a0( w2 ), 
+                                    .a1( { 2'b0, w2[63:2] } ), 
+                                    .a2( { 4'b0, w2[63:4] } ), 
+                                    .a3( { 6'b0, w2[63:6] } ), 
+                                    .sel( sa[3:2] ),
+                                    .enb( 1'b1 ), 
+                                    .y( w3 ));
 
-   Mux_2_1 #( .WIDTH( `DBL_WORD_LENGTH )) U2 (  .a0( w3 ), 
-                                                .a1( { 1'b0, w3[0:64 - 1 - 1 ] } ), 
-                                                .sel( sa[4] ),
-                                                .enb( 1'b1 ), 
-                                                .y( w4 ));
+   Mux_2_1 #( .WIDTH( 64 )) U2  (   .a0( w3 ), 
+                                    .a1( { 1'b0, w3[63:1] } ), 
+                                    .sel( sa[0] ),
+                                    .enb( 1'b1 ), 
+                                    .y( w4 ));
 
 endmodule
 

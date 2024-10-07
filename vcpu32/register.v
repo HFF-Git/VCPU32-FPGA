@@ -27,8 +27,8 @@ module ScanRegUnit #(
 
     ) (
 
-    input   logic                       inClk,
-    input   logic                       inRst,
+    input   logic                       clk,
+    input   logic                       rst,
     inout   logic                       wEnable,
     input   logic[`WORD_LENGTH-1:0]     d,
 

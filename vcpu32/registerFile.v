@@ -27,8 +27,8 @@ module register_file_1R_1W #(
 
     ) (
 
-    input  logic clk,                                   
-    input  logic rst,                                    
+    input  logic                    clk,                                   
+    input  logic                    rst,                                    
 
     input  logic [$clog2(SIZE)-1:0] readAddr1,          
     output logic [WIDTH-1:0]        readData1,          
@@ -74,6 +74,10 @@ module register_file_1R_1W #(
         readData1 = ( readAddr1 == 0 ) ? regFile[ readAddr1 ] : zeroValue;
     end
 
+/*
+
+// to decide: left shift, right shift ? 
+
     always @( posedge sClock ) begin
 
         if ( sEnable ) begin
@@ -89,21 +93,22 @@ module register_file_1R_1W #(
 
                 sOut     <= shiftReg[ 0 ];
                 shiftReg <= { sIn, shiftReg[ 1:SIZE-1] };
-                shiftCnt <= shiftCnt +1; 
+                shiftCnt <= shiftCnt + 1; 
 
             end else begin
 
                 regFile[ shiftAdr ]  <= { sIn, shiftReg[1:SIZE-1]};
                 shiftCnt             <= 0;
 
-                if ( shiftAdr < SIZE -1 )  shiftAdr <= shiftAdr + 1;
-                else                       shiftAdr <= 0;
+                if ( shiftAdr < SIZE - 1 )  shiftAdr <= shiftAdr + 1;
+                else                        shiftAdr <= 0;
          
             end
 
         end
    
      end
+     */
 
 endmodule
 

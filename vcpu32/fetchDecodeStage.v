@@ -47,14 +47,12 @@ module FetchDecodeStage(
   
     );
 
-    reg[`WORD_LENGTH-1:0]   valA, valB, valX;
+    assign opCode     = instr[31:26];
+    assign regIdR     = instr[25:22];
+    assign regIdA     = instr[8:4];
+    assign regIdB     = instr[3:0];
 
-    assign opCode     = inInstr[31:26];
-    assign regIdR     = inInstr[25:22];
-    assign regIdA     = inInstr[8:4];
-    assign regIdB     = inInstr[3:0];
-
-    always @( posedge inClk or negedge inRst ) begin 
+    always @( posedge clk or negedge rst ) begin 
       
         case ( opCode )
            
@@ -214,7 +212,7 @@ module decode (
     output logic[3:0]               regIdR,
     output logic[3:0]               regIdA,
     output logic[3:0]               regIdB,
-    output logic[`WORD_LENGTH-1:0]  immVal,
+    output logic[`WORD_LENGTH-1:0]  immVal
 
     );
 
