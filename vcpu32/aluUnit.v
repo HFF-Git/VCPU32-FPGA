@@ -116,7 +116,6 @@ module AluUnit_old (
  
 endmodule
 
-=======
 //------------------------------------------------------------------------------------------------------------
 // The Adder is a simple adder of two unsigned numbers including a carry in for multi-precision arithmetic.  
 // Any interpretation of signd or unsigned must be handled in the instantiating layer. The Adder unit is
@@ -218,11 +217,14 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 
 module extract (
+    
     input  [31:0] data_in,   // Input data
     input  [4:0]  pos,       // Position (starting bit)
     input  [4:0]  len,       // Length (number of bits)
     output [31:0] data_out   // Output data
-);
+    
+    );
+
     reg [31:0] temp;
 
     always @(*) begin
@@ -233,30 +235,11 @@ module extract (
     end
 
     assign data_out = temp;
+
 endmodule
 
-module deposit (
-    input  [31:0] data_in,   // Input data
-    input  [4:0]  pos,       // Position (starting bit)
-    input  [4:0]  len,       // Length (number of bits)
-    input  [31:0] data_orig, // Original data (to be partially overwritten)
-    output [31:0] data_out   // Output data
-);
-    reg [31:0] mask;
-    reg [31:0] temp;
 
-    always @(*) begin
-        if (len == 0) begin
-            mask = 32'b0;
-            temp = data_orig;
-        end else begin
-            mask = ((1 << len) - 1) << pos;
-            temp = (data_orig & ~mask) | ((data_in << pos) & mask);
-        end
-    end
 
-    assign data_out = temp;
-=======
 //------------------------------------------------------------------------------------------------------------
 module extractUnit( 
 
@@ -289,6 +272,30 @@ module depositUnit(
     );
 
 
+
+endmodule
+
+module deposit (
+    input  [31:0] data_in,   // Input data
+    input  [4:0]  pos,       // Position (starting bit)
+    input  [4:0]  len,       // Length (number of bits)
+    input  [31:0] data_orig, // Original data (to be partially overwritten)
+    output [31:0] data_out   // Output data
+);
+    reg [31:0] mask;
+    reg [31:0] temp;
+
+    always @(*) begin
+        if (len == 0) begin
+            mask = 32'b0;
+            temp = data_orig;
+        end else begin
+            mask = ((1 << len) - 1) << pos;
+            temp = (data_orig & ~mask) | ((data_in << pos) & mask);
+        end
+    end
+
+    assign data_out = temp;
 
 endmodule
 
