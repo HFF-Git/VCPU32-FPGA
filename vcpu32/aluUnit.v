@@ -10,12 +10,18 @@
 //------------------------------------------------------------------------------------------------------------
 `include "defines.vh"
 
-
 //------------------------------------------------------------------------------------------------------------
+//
+//
+//
+//  ??? combines logic unit and adders...
 //------------------------------------------------------------------------------------------------------------
 module AluUnit( 
 
+    input  logic[31:0]   valA,
+    input  logic[31:0]   valB,
 
+    output logic[31:0]   valR   
 );
 
 
@@ -23,11 +29,23 @@ endmodule
 
 
 //------------------------------------------------------------------------------------------------------------
+//
+//
+// ??? combines double shift, extr and dep in one module...
 //------------------------------------------------------------------------------------------------------------
 module ShiftMergeUnit( 
 
+    input  logic[31:0]   valA,
+    input  logic[31:0]   valB,
+    input  logic[4:0]    pos,
+    input  logic[4:0]    len,
+
+
+    output logic[31:0]   valR
 
 );
+
+
 
 
 endmodule
@@ -211,7 +229,9 @@ endmodule
 
 
 //------------------------------------------------------------------------------------------------------------
-//
+// "extractUnit32" is the logic for the extract operation. A bit field specified by the rightmost position 
+// "pos" and a length "len" extending to the left will be extracted. If the sign option is set, the extracted
+// bit field is sign extended, 
 //
 //------------------------------------------------------------------------------------------------------------
 module extractUnit32( 
@@ -225,26 +245,70 @@ module extractUnit32(
 
     );
 
-    reg [31:0] temp;
+    logic [31:0] temp;
 
     always @(*) begin
 
-        if (len == 0)
+        if (len == 0) begin
+
             temp = 32'b0;
-        else
-            temp = ( valIn >> ( 31 - pos )) & ((1 << len) - 1 );
 
-        // ??? sign extension ?
-    
+        end else begin
+       
+            temp = ( valIn >> (31 - pos )) & ((1 << len) - 1 );
+
+            if ( sign ) begin
+                
+                case( len )
+
+                    1: valOut = {{31{temp[0]}}, temp[0:0]};
+                    2: valOut = {{30{temp[1]}}, temp[1:0]};
+                    3: valOut = {{29{temp[2]}}, temp[2:0]};
+                    4: valOut = {{28{temp[3]}}, temp[3:0]};
+                    5: valOut = {{27{temp[4]}}, temp[4:0]};
+                    6: valOut = {{26{temp[5]}}, temp[5:0]};
+                    7: valOut = {{25{temp[6]}}, temp[6:0]};
+                    8: valOut = {{24{temp[7]}}, temp[7:0]};
+                    9: valOut = {{23{temp[8]}}, temp[8:0]};
+                    10: valOut = {{22{temp[9]}}, temp[9:0]};
+                    11: valOut = {{21{temp[10]}}, temp[10:0]};
+                    12: valOut = {{20{temp[11]}}, temp[11:0]};
+                    13: valOut = {{19{temp[12]}}, temp[12:0]};
+                    14: valOut = {{18{temp[13]}}, temp[13:0]};
+                    15: valOut = {{17{temp[14]}}, temp[14:0]};
+                    16: valOut = {{16{temp[15]}}, temp[15:0]};
+                    17: valOut = {{15{temp[16]}}, temp[16:0]};
+                    18: valOut = {{14{temp[17]}}, temp[17:0]};
+                    19: valOut = {{13{temp[18]}}, temp[18:0]};
+                    20: valOut = {{12{temp[19]}}, temp[19:0]};
+                    21: valOut = {{11{temp[20]}}, temp[20:0]};
+                    22: valOut = {{10{temp[21]}}, temp[21:0]};
+                    23: valOut = {{9{temp[22]}}, temp[22:0]};
+                    24: valOut = {{8{temp[23]}}, temp[23:0]};
+                    25: valOut = {{7{temp[24]}}, temp[24:0]};
+                    26: valOut = {{6{temp[25]}}, temp[25:0]};
+                    27: valOut = {{5{temp[26]}}, temp[26:0]};
+                    28: valOut = {{4{temp[27]}}, temp[27:0]};
+                    29: valOut = {{3{temp[28]}}, temp[28:0]};
+                    30: valOut = {{2{temp[29]}}, temp[29:0]};
+                    31: valOut = {{1{temp[30]}}, temp[30:0]};
+                    32: valOut = temp[31:0];
+                    default: valOut = 32'b0; 
+                endcase
+
+            end else begin 
+
+                valOut = temp;
+            end
+        end
     end
-
-    assign valOut = temp;
 
 endmodule
 
 
 //------------------------------------------------------------------------------------------------------------
-//
+// "depositUnit32" deposits a bit field "valArg" of length "len" into the input argument "valIn" at position
+// "pos". The bit field is deposited left of the "pos" argument.
 //
 //------------------------------------------------------------------------------------------------------------
 module depositUnit32( 
@@ -283,7 +347,6 @@ endmodule
 // Double Shift Unit. The unit takes two words, A and B, concatenates them and performs a logical shift right
 // operation. We implement a barrel shifter type unit using 4 and 2 way multiplexers.
 //
-// ??? rework ....
 //------------------------------------------------------------------------------------------------------------
 module doubleShiftUnit64 (
 
@@ -323,6 +386,3 @@ module doubleShiftUnit64 (
                                     .y( w4 ));
 
 endmodule
-
-
-
