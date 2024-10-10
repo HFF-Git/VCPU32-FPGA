@@ -4,7 +4,7 @@
 #  Copyright (C) 2022 - 2024 Helmut Fieres, see License file.
 # ------------------------------------------------------------------------------------------------------------
 #
-# This is the CMAKE file at the vpcu32 provessor core level. 
+# This is the CMAKE file at the vpcu32 processor core level. 
 #
 # ------------------------------------------------------------------------------------------------------------
 cmake_minimum_required( VERSION 3.29 )
@@ -24,7 +24,6 @@ set(VERILOG_SOURCES
     ${CMAKE_SOURCE_DIR}/vcpu32/tlb.v
     ${CMAKE_SOURCE_DIR}/vcpu32/aluUnit.v
     ${CMAKE_SOURCE_DIR}/vcpu32/register.v
-    ${CMAKE_SOURCE_DIR}/vcpu32/registerFile.v
     ${CMAKE_SOURCE_DIR}/vcpu32/vcpu32.v
 )
 
