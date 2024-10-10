@@ -209,41 +209,49 @@ module decode (
     input  logic[`WORD_LENGTH-1:0]  instr,
 
     output logic[5:0]               opCode,
-    output logic[3:0]               regIdR,
     output logic[3:0]               regIdA,
     output logic[3:0]               regIdB,
+    output logic[3:0]               regIdX,
     output logic[`WORD_LENGTH-1:0]  immVal
 
     );
 
     assign opCode     = instr[31:26];
     assign opMode     = instr[19:18];
-    assign regIdR     = instr[25:22];
-    assign regIdA     = instr[7:4];
-    assign regIdB     = instr[3:0];
-
-    // ??? primraily set the immediate filed value ... regs are fixed...
 
     always @(*) begin 
       
         case ( opCode )
            
-            `OP_ADD, `OP_ADC, `OP_SBC, `OP_SUB: begin
+            `OP_ADD, `OP_ADC, `OP_SBC, `OP_SUB, `OP_AND, `OP_OR, `OP_XOR, `OP_CMP: begin
 
-                if ( opMode == 2'b0 ) begin
+                case ( opMode ) 
 
-                    // basic idea: the sign bit fills to the right, the other part is simply extracted...
-                    // ??? perhaps write a function with bit length and pos ?
-                    // y = {{ 21{ instr[15] }}, { instr[ 15:17] }};
+                    2'b00: begin 
 
-                    // 
+                        regIdA = instr[25:22];
+                        regIdB = 4'b0;
+                        regIdX = 4'b0;
+                        immVal = {{ 15{ instr[0]}}, { instr[17:0] }};
+                    end
 
-                end
-    
+                    2'b01: begin 
 
-            end
+                        regIdA = instr[7:4];
+                        regIdB = instr[3:0];
+                        regIdX = 4'b0;
+                        immVal = 32'b0;
+                    end
 
-            `OP_AND, `OP_OR, `OP_XOR: begin
+                    2'b10: begin 
+
+                    end
+
+                    2'b11: begin 
+
+                    end
+
+                endcase
 
             end
 
@@ -252,10 +260,6 @@ module decode (
             end
 
             `OP_ADDIL: begin 
-
-            end
-
-            `OP_CMP: begin
 
             end
 
