@@ -25,7 +25,7 @@
 // for the  pipeline register so we can see the setting of them during debug.
 //
 //------------------------------------------------------------------------------------------------------------
-module ScanRegUnit #( 
+module Register #( 
 
     parameter WIDTH = `WORD_LENGTH
 
@@ -36,12 +36,12 @@ module ScanRegUnit #(
     inout   logic                       wEnable,
     input   logic[`WORD_LENGTH-1:0]     d,
 
-    output   logic[`WORD_LENGTH-1:0]    q,
+    output  logic[`WORD_LENGTH-1:0]     q,
     
-    input    logic                      sClock,
-    input    logic                      sEnable,
-    input    logic                      sIn,
-    output   logic                      sOut
+    input   logic                       sClock,
+    input   logic                       sEnable,
+    input   logic                       sIn,
+    output  logic                       sOut
 
     );
 
@@ -90,7 +90,7 @@ endmodule
 //
 // ??? carefully check the JTAG logic..
 //------------------------------------------------------------------------------------------------------------
-module register_file_1R_1W #( 
+module Register_file_1R_1W #( 
 
     parameter SIZE  = 8,
     parameter WIDTH = `WORD_LENGTH
@@ -186,7 +186,7 @@ endmodule
 // quite large, a simple state machine will shift the data on a word by basis.
 //
 //------------------------------------------------------------------------------------------------------------
-module register_file_2R_1W #( 
+module Register_file_2R_1W #( 
 
     parameter SIZE  = 16,
     parameter WIDTH = `WORD_LENGTH
@@ -256,7 +256,7 @@ endmodule
 // machine will shift the data on a word by word basis. 
 //
 //------------------------------------------------------------------------------------------------------------
-module register_file_3R_2W #( 
+module Register_file_3R_2W #( 
 
     parameter SIZE  = 16,
     parameter WIDTH = `WORD_LENGTH
