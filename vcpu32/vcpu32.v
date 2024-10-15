@@ -5,7 +5,7 @@
 //  Copyright (C) 2022 - 2024 Helmut Fieres, see License file.
 //------------------------------------------------------------------------------------------------------------
 // 
-// - contains a lot of modules in one file...
+// 
 // - test benches are however separate...
 //
 //
@@ -18,12 +18,28 @@
 //------------------------------------------------------------------------------------------------------------
 module vcpu32(
 
-    input logic     inClk,
-    input logic     inRst
+    input logic     clk,
+    input logic     rst
 
     );
 
-    always @( posedge inClk ) begin
+
+    Register pState0 ( );
+    Register pState1 ( );
+
+    // ??? a boat load of registers, all the pipeline registers...
+
+    // ??? should the general register file be decared here ?
+    // ??? should the segment register file be decared here ?
+    // ??? should the control registers be decared here ?
+
+    // ??? the consequence is a lot of wires to pass around... the pipelien logic is then combinatorial ?
+
+    always @( negedge clk ) begin
+
+    end
+
+    always @( posedge clk ) begin
 
     end
 

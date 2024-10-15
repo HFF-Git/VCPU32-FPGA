@@ -1,12 +1,10 @@
 //------------------------------------------------------------------------------------------------------------
 //
-//  VCPU-32
+//  VCPU32-FPGA
 //
 //  Copyright (C) 2022 - 2024 Helmut Fieres, see License file.
 //------------------------------------------------------------------------------------------------------------
-// This file contains a family of register files. They feature one or more read ports and one or two write
-// ports. The read operation is an asynchronous operation, the write operation takles place synchronous to
-// the clock signal.
+// This file contains the fetch and decode pipeline stage logic.
 //
 //------------------------------------------------------------------------------------------------------------
 `include "defines.vh"
@@ -19,39 +17,100 @@
 //------------------------------------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------------------------------------
+// The fetch and decode stage is a two part stage. The first part will access the instruction memory interface
+// and obtain the instruction. The secpnd part will dcode the instruction and prepare the information to 
+// access the generaö register file.
 //
-//
-//
-// ??? big question: should we just have one stage ? YES
-// ??? how do we make sure that this is not a hugo source file ?
-// ??? will functions help to encapsulate details ? E.g immGen.... 
 //------------------------------------------------------------------------------------------------------------
 module FetchDecodeStage( 
    
-    input  logic                   clk,
-    input  logic                   rst, 
+    input   logic                   clk,
+    input   logic                   rst, 
     
-    input  logic[`WORD_LENGTH-1:0] inPstate0,
-    input  logic[`WORD_LENGTH-1:0] inPstate1,
+    input   logic[`WORD_LENGTH-1:0] inPstate0,
+    input   logic[`WORD_LENGTH-1:0] inPstate1,
+
+    input   logic[`WORD_LENGTH-1:0] regByPassVal,
     
-    output logic[`WORD_LENGTH-1:0] outPstate0,
-    output logic[`WORD_LENGTH-1:0] ourPstate1,
-    output logic[`WORD_LENGTH-1:0] instr,
-    output logic[`WORD_LENGTH-1:0] valA,
-    output logic[`WORD_LENGTH-1:0] valB,
-    output logic[`WORD_LENGTH-1:0] valX
+    output  logic[`WORD_LENGTH-1:0] outPstate0,
+    output  logic[`WORD_LENGTH-1:0] ourPstate1,
+    output  logic[`WORD_LENGTH-1:0] instr,
+    output  logic[`WORD_LENGTH-1:0] valA,
+    output  logic[`WORD_LENGTH-1:0] valB,
+    output  logic[`WORD_LENGTH-1:0] valX
+
+    // general register write back interface ?
+
+    // Trap interface ?
+
+    // JTAG interface ?
+
+    // I-MEM unit interface ?
   
     );
 
-    Register instrReg ( .clk( clk ), .rst( rst ) );
+    Register                instrReg ( .clk( clk ), .rst( rst ), .d( ), .q( instr ) );
 
-    always @( negedge rst ) begin
+    logic[`WORD_LENGTH-1:0] readDataA, readDataB, readDataX, writeDataR, writeDataX, immVal;
+    logic[3:0]              readAddrA, readAddrB, readAddrX, writeAddrR, writeAddrX;
 
-    end
+    Register_file_3R_2W     gregFile (  .clk( clk ), 
+                                        .rst( rst),  
+                                        .readAddr1( readAddrA ),
+                                        .readData1( readDataA ),
+                                        .readAddr2( readAddrB ),
+                                        .readData2( readDataB ),
+                                        .readAddr3( readAddrX ),
+                                        .readData3( readDataX ),
 
-    always @( posedge clk ) begin
+                                        .writeAddr1( writeAddrR ),
+                                        .writeData1( writeDataR ),
+                                        .writeAddr2( writeAddrX ),
+                                        .writeData2( writeDataX )
+                                        
+                                        );
 
-    end
+    Mux_2_1  #( .WIDTH( `WORD_LENGTH )) muxValA (   .sel( ), 
+                                                    .enb( ), 
+                                                    .a0( regByPassVal ), 
+                                                    .a1( readDataA ), 
+                                                    .y( valA )); 
+
+    Mux_4_1  #( .WIDTH( `WORD_LENGTH )) muxValB (   .sel( ), 
+                                                    .enb( ), 
+                                                    .a0( regByPassVal ), 
+                                                    .a1( readDataB ), 
+                                                    .a2( immVal ), 
+                                                    .a3( ),
+                                                    .y( valB )); 
+                                
+    Mux_4_1  #( .WIDTH( `WORD_LENGTH )) muxValX (   .sel( ), 
+                                                    .enb( ), 
+                                                    .a0( regByPassVal ), 
+                                                    .a1( readDataX ), 
+                                                    .a2( immVal ), 
+                                                    .a3( ),
+                                                    .y( valX ));
+
+    FetchSubStage fetchSubStage (   .clk( clk ),
+                                    .rst( rst ),
+                                    .pState0( ),
+                                    .pState1( ),
+                                    
+                                    .instr( ));
+
+    DecodeSubStage decodeSubStage ( .clk( clk ),
+                                    .rst( rst ),
+                                    .instr( instr ), 
+                                    .regIdA( readAddrA ), 
+                                    .regIdB( readAddrB ), 
+                                    .regIdX( readAddrX ), 
+                                    .immVal( immVal ), 
+                                    .valid( )
+
+
+                                    );
+
 
 endmodule
 
@@ -66,12 +125,12 @@ module FetchSubStage(
     input  logic                   clk,
     input  logic                   rst,
 
-    input  logic[`WORD_LENGTH-1:0] inPstate0,
-    input  logic[`WORD_LENGTH-1:0] inPstate1,
+    input  logic[`WORD_LENGTH-1:0] pState0,
+    input  logic[`WORD_LENGTH-1:0] pState1,
 
-    output logic[`WORD_LENGTH-1:0] outPstate0,
-    output logic[`WORD_LENGTH-1:0] ourPstate1,
-    output logic[`WORD_LENGTH-1:0] instr
+    output logic[`WORD_LENGTH-1:0] instr,
+
+    output logic                   valid
 
     // interface to I-cache
     // stall signal
@@ -101,16 +160,29 @@ module DecodeSubStage(
 
     input  logic[`WORD_LENGTH-1:0] inPstate0,
     input  logic[`WORD_LENGTH-1:0] inPstate1,
+    input  logic[`WORD_LENGTH-1:0] instr,
 
-    output logic[`WORD_LENGTH-1:0] instr
 
-    // interface to genera register file
+    output logic[3:0]               regIdA,
+    output logic[3:0]               regIdB,
+    output logic[3:0]               regIdX,
+    output logic[`WORD_LENGTH-1:0]  immVal,
+
+    output logic                    valid
+   
+    
     // trap logic
     // stall logic
+    // next instrcution address logic ?
 
     );
 
-    DecodeLogic decode ( );
+    DecodeLogic decode  (   .instr( instr ), 
+                            .regIdA( regIdA ), 
+                            .regIdB( regIdB ), 
+                            .regIdX( regIdX ), 
+                            .immVal( immVal ), 
+                            .valid( ));
 
     always @( negedge rst ) begin
 
@@ -124,7 +196,8 @@ endmodule
 
 //------------------------------------------------------------------------------------------------------------
 // "decodeLogic" is the combinatorila logic that decdes forn the instruction word the register numbers for
-// the general register file. It also decodes the immediate value if there is one in the instruction. 
+// the general register file. It also decodes the immediate value if there is one in the instruction. If 
+// the instruction opCode is not defined, the "valid" line is set to zero.
 //
 //------------------------------------------------------------------------------------------------------------
 module DecodeLogic ( 
@@ -135,7 +208,6 @@ module DecodeLogic (
     output logic[3:0]               regIdB,
     output logic[3:0]               regIdX,
     output logic[`WORD_LENGTH-1:0]  immVal,
-
     output logic                    valid
 
     );

@@ -20,9 +20,9 @@ set(VERILOG_SOURCES
     ${CMAKE_SOURCE_DIR}/vcpu32/fetchDecodeStage.v
     ${CMAKE_SOURCE_DIR}/vcpu32/operandFetchStage.v
     ${CMAKE_SOURCE_DIR}/vcpu32/executeStage.v
-    ${CMAKE_SOURCE_DIR}/vcpu32/register.v
-    ${CMAKE_SOURCE_DIR}/vcpu32/cache.v
-    ${CMAKE_SOURCE_DIR}/vcpu32/tlb.v
+    ${CMAKE_SOURCE_DIR}/vcpu32/registerUnit.v
+    ${CMAKE_SOURCE_DIR}/vcpu32/cacheUnit.v
+    ${CMAKE_SOURCE_DIR}/vcpu32/tlbUnit.v
     ${CMAKE_SOURCE_DIR}/vcpu32/aluUnit.v
     ${CMAKE_SOURCE_DIR}/vcpu32/vcpu32.v
 )
