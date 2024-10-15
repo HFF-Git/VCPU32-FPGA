@@ -120,15 +120,15 @@ module Register_file_1R_1W #(
     reg [$clog2(WIDTH)-1:0]         shiftCnt;
 
     integer                         i;
-
-    assign zeroValue = {WIDTH{1'b0}};
+   
+    localparam                      ZERO = {WIDTH{1'b0}};
 
     always @(posedge clk or negedge rst) begin
 
         if ( ~ rst ) begin
             
             for ( i = 0; i < SIZE; i = i + 1 ) begin
-                regFile[i] <= zeroValue;
+                regFile[i] <= ZERO;
             end
         end else begin
             
@@ -141,7 +141,7 @@ module Register_file_1R_1W #(
 
     always @(*) begin
         
-        readData1 = ( readAddr1 == 0 ) ? regFile[ readAddr1 ] : zeroValue;
+        readData1 = ( readAddr1 == 0 ) ? regFile[ readAddr1 ] : ZERO;
     end
 
     always @( posedge sClock ) begin
@@ -220,14 +220,14 @@ module Register_file_2R_1W #(
 
     integer                         i;
 
-    assign zeroValue = {WIDTH{1'b0}};
-
+    localparam                      ZERO = {WIDTH{1'b0}};
+  
     always @( posedge clk or negedge rst ) begin
 
         if ( ~ rst ) begin
 
             for ( i = 0; i < SIZE; i = i + 1 ) begin
-                regFile[i] <= zeroValue;
+                regFile[i] <= ZERO;
             end
         
         end else begin
@@ -240,8 +240,8 @@ module Register_file_2R_1W #(
 
     always @(*) begin
 
-        readData1 = ( readAddr1 != 0 ) ? regFile[ readAddr1 ] : zeroValue;
-        readData2 = ( readAddr2 != 0 ) ? regFile[ readAddr2 ] : zeroValue;
+        readData1 = ( readAddr1 != 0 ) ? regFile[ readAddr1 ] : ZERO;
+        readData2 = ( readAddr2 != 0 ) ? regFile[ readAddr2 ] : ZERO;
     end
 
 endmodule
@@ -296,15 +296,15 @@ module Register_file_3R_2W #(
     reg [$clog2(WIDTH)-1:0]         shiftCnt;
 
     integer                         i;
-
-    assign zeroValue = {WIDTH{1'b0}};
+    
+    localparam                      ZERO = {WIDTH{1'b0}};
 
     always @( posedge clk or negedge rst ) begin
 
         if ( ~ rst ) begin
 
             for ( i = 0; i < SIZE; i = i + 1 ) begin
-                regFile[i] <= zeroValue;
+                regFile[i] <= ZERO;
             end
         
         end else begin
@@ -321,9 +321,9 @@ module Register_file_3R_2W #(
 
     always @(*) begin
 
-        readData1 = ( readAddr1 != 0 ) ? regFile[ readAddr1 ] : zeroValue;
-        readData2 = ( readAddr2 != 0 ) ? regFile[ readAddr2 ] : zeroValue;
-        readData3 = ( readAddr2 != 0 ) ? regFile[ readAddr3 ] : zeroValue;
+        readData1 = ( readAddr1 != 0 ) ? regFile[ readAddr1 ] : ZERO;
+        readData2 = ( readAddr2 != 0 ) ? regFile[ readAddr2 ] : ZERO;
+        readData3 = ( readAddr2 != 0 ) ? regFile[ readAddr3 ] : ZERO;
     end
 
 endmodule

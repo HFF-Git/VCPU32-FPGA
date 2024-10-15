@@ -212,6 +212,9 @@ module DecodeLogic (
 
     );
 
+    logic [5:0] opCode;
+    logic [1:0] opMode;
+
     assign opCode     = instr[31:26];
     assign opMode     = instr[19:18];
      
