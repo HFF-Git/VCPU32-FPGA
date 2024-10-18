@@ -211,3 +211,19 @@ module Executetage(
 
 endmodule
 
+
+module computeSubStage (
+
+
+    );
+
+endmodule
+
+module committSubStage (
+
+
+    );
+
+endmodule
+
+

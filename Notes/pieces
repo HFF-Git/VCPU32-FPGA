@@ -139,7 +139,9 @@ module Cache (
     end
 endmodule
 
-Arbiter Module
+
+
+
 
 module Arbiter (
     input wire clk,
@@ -173,7 +175,9 @@ module Arbiter (
     end
 endmodule
 
-Memory Interface Module
+
+
+
 
 module MemoryInterface (
     input wire clk,
@@ -219,7 +223,8 @@ module MemoryInterface (
     end
 endmodule
 
-Top-Level Module
+
+
 
 module TopLevel (
     input wire clk,
@@ -299,4 +304,1372 @@ Explanation
 This example is simplified to illustrate the concept. In a real-world scenario, additional features like cache coherence, more sophisticated arbitration mechanisms, and handling of cache misses with proper memory access would be necessary.
 
 
+
+//------------------------------------------------------------------------------------------------------------
+// The "VCPU32" module is the actual CPU. The top level module. Below we will have the cpu cores with the 
+// the two L1 caches, the TLBs, perhaps a joint L2 cache and the system bus interfaces. In addition, we 
+// will feature an intercace to the visible instruction register and teh syste switch register. Also, a JTAG
+// interface would be nice. Well, quite a list....
+//
+//
+// ??? need an idea of a memory.
+// ??? need an idea of a system bus.
+//
+//
+//------------------------------------------------------------------------------------------------------------
+module VCPU32 ( 
+
+   input wire  clk,
+   input wire  rst,
+
+   // ??? the system bus
+   // ??? need an address output
+   // ??? need a data input/putput
+   // ??? need control lines for the bus
+
+
+
+   // ??? need an output port for the insztruction register ( :-) I want it on a panel... )
+
+   output   wire[0:`WORD_LENGTH-1]  outInstrReg, 
+   
+   // ??? need an input and ouput for the system switch register switches / display.
+   
+   input    wire[0:`WORD_LENGTH-1]  inSwtReg,
+   output   wire[0:`WORD_LENGTH-1]  outSwtReg,
+
+   // ??? need a serial interface for the scan chain.
+
+   input    wire  sMode,
+   input    wire  sIn,
+   output   wire  sOut
+
+   );
+
+   CpuCoreUnit #( 
+
+      . M_BLOCK_SIZE( 4 )
+
+   ) cpuCore ( 
+
+      .clk( clk ),
+      .rst( rst ),
+      .mReadOp( ),
+      .mWriteOp( ),
+      .mDataIn( ),  
+      .mReady( ), 
+      .mAdrCpuId( ),
+      .mAdrBank( ),
+      .mAdrOfs( ),
+      .mDataOut( ));
+
+endmodule
+   
+
+module CpuCoreUnit #( 
+
+   parameter M_BLOCK_SIZE = 4
+
+   ) ( 
+
+   input    wire                                clk,
+   input    wire                                rst,
+  
+   output   wire                                mReadOp,
+   output   wire                                mWriteOp,
+   input    wire[0:M_BLOCK_SIZE*`WORD_LENGTH-1] mDataIn,  
+
+   output   wire                                mReady, 
+   output   wire[0:3]                           mAdrCpuId,
+   output   wire[0:3]                           mAdrBank,
+   output   wire[0:`WORD_LENGTH-1]              mAdrOfs,
+   output   wire[0:M_BLOCK_SIZE*`WORD_LENGTH-1] mDataOut,
+
+   input  wire                                  sClock,
+   input  wire                                  sEnabled,
+   input  wire                                  sIn,
+   output wire                                  sOut 
+
+   );
+
+   // wires to connect the major modules...
+
+   wire[0:`WORD_LENGTH-1] wIaReg1, wIaReg2, wIaReg3;
+   wire[0:`WORD_LENGTH-1] wFdMaReg1, wFdMaReg2, wFdMaReg3, wFdMaReg4, wFdMaReg5, wFdMaReg6; 
+   wire[0:`WORD_LENGTH-1] wExReg1, wExReg2, wExReg3, wExReg4, wExReg5, wExReg6, wExReg7; 
+   
+   wire[0:`WORD_LENGTH-1] wNi1, wNi2;
+   wire[0:`WORD_LENGTH-1] wFsStage1;
+   wire[0:`WORD_LENGTH-1] wDecStage1, wDecStage2, wDecStage3, wDecStage4, wDecStage5, wDecStage6, wDecStage7;
+   wire[0:`WORD_LENGTH-1] wDaStage1, wDaStage2, wDaStage3, wDaStage4, wDaStage5, wDaStage6, wDaStage7; 
+   wire[0:`WORD_LENGTH-1] wExStage1;
+   wire[0:`WORD_LENGTH-1] wCsStage1, wCsStage2, wCsStage3, wCsStage4;
+
+   // control wires...
+
+   wire[0:1] nextIaSelect;
+
+   assign nextIaSelect = 2'b00; // for testing, just increment the IA...
+
+   // instances... 
+
+   SelectNextInstrAdr nextInstrAdr ( 
+
+      .clk( clk ), 
+      .rst( rst ),
+      .sel( nextIaSelect ),
+
+      .inFdP( wDecStage1 ),
+      .inFdO( wDecStage2 ),
+      .inFdOfs( wDecStage7 ),
+      .inMaO( wDaStage7 ),
+      .inExP( wCsStage1 ),
+      .inExO( wCsStage2 ),
+
+      .outP( wNi1 ), 
+      .outO( wNi2 ));
+
+   // ??? what do we do about the status register ? will that also be just passed along ?
+
+   PregInstrAdr pregInstrAdr ( 
+
+      .clk( clk ), 
+      .rst( rst ),
+
+      .inP( wNi1 ), 
+      .inO( wNi2 ),
+     
+
+      .outP( wIaReg1 ), 
+      .outO( wIaReg2 ),
+
+      .sClock( sClock ),
+      .sEnable( sEnable ),
+      .sIn( sIn ), 
+      .sOut( sOut )
+   );
+
+   FetchSubStage fSubStage ( 
+
+      .clk( clk ), 
+      .rst( rst ), 
+
+      .inP( wIaReg1 ),
+      .inO( wIaReg2 ),
+
+      .outI( wFsStage1 )
+      );
+
+   DecodeSubStage dSubStage ( 
+
+      .clk( clk ), 
+      .rst( rst ), 
+
+      .inP( wIaReg1 ),
+      .inO( wIaReg2 ),
+      .inI( wFsStage1 ),
+      .inBP( wCsStage3 ),
+
+      .outP( wDecStage1 ),
+      .outO( wDecStage2 ),
+      .outI( wDecStage3 ), 
+      .outA( wDecStage4 ), 
+      .outB( wDecStage5 ), 
+      .outX( wDecStage6 ),
+      .outIaOfs( wDecStage7 )
+   );
+
+   PregFdMa pregFdMa ( 
+
+      .clk( clk ), 
+      .rst( rst ), 
+     
+      .inP( wIaReg1 ), 
+      .inO( wIaReg2 ),
+      .inI( wDecStage3 ),
+      .inA( wDecStage4 ),
+      .inB( wDecStage5 ),
+      .inX( wDecStage6 ),
+     
+      .outP( wFdMaReg1 ), 
+      .outO( wFdMaReg2 ), 
+      .outI( wFdMaReg3 ),
+      .outA( wFdMaReg4 ), 
+      .outB( wFdMaReg5 ), 
+      .outX( wFdMaReg6 ),
+    
+      .sClock( sClock ),
+      .sEnable( sEnable ),
+      .sIn( sIn ), 
+      .sOut( sOut )
+   );
+
+   ComputeAddressSubStage caSubStage ( 
+
+      .clk( clk ), 
+      .rst( rst ),
+      
+      .inP( wFdMaReg1 ), 
+      .inO( wFdMaReg2 ),
+      .inI( wFdMaReg3 ),
+      .inA( wFdMaReg4 ),
+      .inB( wFdMaReg5 ),
+      .inX( wFdMaReg6 )
+      
+      // ??? ouput to data access stage...
+
+      );
+
+   DataAccessSubStage daSubStage ( 
+
+      .clk( clk ), 
+      .rst( rst ),
+
+      // ??? input from address computation substage
+
+      .inBP( wCsStage4 ),
+
+      .outI( wDaStage3 ), 
+      .outA( wDaStage4 ), 
+      .outB( wDaStage5 ), 
+      .outX( wDaStage6 ),
+      .outS( wDaStage7 ),
+      .outDaOfs( wDecStage7 )
+   );
+
+   PregMaEx pregMaEx ( 
+
+      .clk( clk ), 
+      .rst( rst ), 
+   
+      .inP( wFdMaReg1 ), 
+      .inO( wFdMaReg2 ),
+      .inI( wDaStage3 ),
+      .inA( wDaStage4 ),
+      .inB( wDaStage5 ),
+      .inX( wDaStage6 ),
+      .inS( wDaStage7 ),
+     
+      .outP( wExReg1 ), 
+      .outO( wExReg2 ), 
+      .outI( wExReg3 ),
+      .outA( wExReg4 ), 
+      .outB( wExReg5 ), 
+      .outX( wExReg6 ),
+      .outS( wExReg7 ),
+     
+      .sClock( sClock ),
+      .sEnable( sEnable ),
+      .sIn( sIn ), 
+      .sOut( sOut )
+   );
+
+  
+
+  
+   // ??? the caches and TLBs are local to the substage where the are used. Nevertheless, these modules need
+   // access to memory or L2 cache... how to model this ?
+   // ??? memory interface stays local to this module ...
+
+   ItlbUnit iTlb ( 
+      
+      .clk( clk ), 
+      .rst( rst )
+
+      );
+
+   DtlbUnit dTlb ( 
+      
+      .clk( clk ), 
+      .rst( rst )
+
+      );
+
+   ICacheUnit iCache ( 
+
+      .clk( clk ), 
+      .rst( rst )
+
+      );
+
+   DCacheUnit dCache ( 
+
+      .clk( clk ), 
+      .rst( rst )
+
+      );
+
+   MemoryInterface MEM ( 
+
+   .clk( clk ), 
+   .rst( rst ) 
+
+   );
+
+   always @( negedge rst ) begin
+
+      // ??? what to perhaps do on a reset ?
+      // ??? set the IA to 0:F0000000
+
+   end
+
+endmodule
+
+
+//------------------------------------------------------------------------------------------------------------
+// Pipeline register: instruction address. An instruction address consists of the segment and the offset. It
+// is commonly also called the program counter. There is also the status word which together with the current
+// instruction address make up the prgram state. Internally we have instances for each of the register parts.
+// The registers a scan registers, which link serially for diagnostics and debugging.
+//
+//------------------------------------------------------------------------------------------------------------
+module PregInstrAdr ( 
+
+   input  wire                   clk,
+   input  wire                   rst,
+   
+   input  wire[0:`WORD_LENGTH-1] inP,
+   input  wire[0:`WORD_LENGTH-1] inO,
+   input  wire[0:`WORD_LENGTH-1] inST,
+ 
+   output wire[0:`WORD_LENGTH-1] outP,
+   output wire[0:`WORD_LENGTH-1] outO, 
+   output wire[0:`WORD_LENGTH-1] outST,
+
+   input  wire                   sClock,
+   input  wire                   sEnable,
+   input  wire                   sIn,
+   output wire                   sOut
+
+   );
+
+   wire w1, w2;
+
+   ScanRegUnit iaSeg (  .clk( clk ), 
+                        .rst( rst ), 
+                       
+                        .d( inP ),
+                        .q( outP ), 
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( sIn ), 
+                        .sOut( w1 )
+                     );
+
+   ScanRegUnit iaOfs (  .clk( clk ), 
+                        .rst( rst ), 
+                        
+                        .d( inO ),
+                        .q( outO ),
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w1 ), 
+                        .sOut( w2 )
+                     );
+
+   ScanRegUnit status ( .clk( clk ), 
+                        .rst( rst ), 
+                        
+                        .d( inST ), 
+                        .q( outST ),
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w2 ), 
+                        .sOut( sOut )
+                     );
+   
+endmodule
+
+//------------------------------------------------------------------------------------------------------------
+// Pipeline register INSTR. The fetch decode stage contains two major parts. The fetch sub-stage will fetch
+// the next instruction from the current instruction address. The instruction will be teh inoput to the 
+// decode sub-stage.
+// 
+//------------------------------------------------------------------------------------------------------------
+module PregInstr (
+
+   input  wire                   clk,
+   input  wire                   rst,
+   input  wire[0:`WORD_LENGTH-1] inInstr,
+   
+   output wire[0:`WORD_LENGTH-1] outInstr,
+
+   input  wire                   sClock,
+   input  wire                   sEnable,
+   input  wire                   sIn,
+   output wire                   sOut
+
+   );
+
+   ScanRegUnit iReg (   .clk( clk ), 
+                        .rst( rst ), 
+
+                        .d( inInstr ), 
+                        .q( outInstr ),
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( sIn ), 
+                        .sOut( sOut )
+                     );
+
+endmodule
+
+//------------------------------------------------------------------------------------------------------------
+// Pipeline register: FD to MA Stage. The FD-MA pipeline register is between the fetch-decode and the memory
+// access pipeline stage. Internally we have instances for each of the register parts.
+// 
+//------------------------------------------------------------------------------------------------------------
+module PregFdMa ( 
+
+   input  wire                   clk,
+   input  wire                   rst,
+
+   input  wire[0:`WORD_LENGTH-1] inP,
+   input  wire[0:`WORD_LENGTH-1] inO,
+   input  wire[0:`WORD_LENGTH-1] inI,
+   input  wire[0:`WORD_LENGTH-1] inA,
+   input  wire[0:`WORD_LENGTH-1] inB,
+   input  wire[0:`WORD_LENGTH-1] inX,
+
+   output wire[0:`WORD_LENGTH-1] outP,
+   output wire[0:`WORD_LENGTH-1] outO,
+   output wire[0:`WORD_LENGTH-1] outI,
+   output wire[0:`WORD_LENGTH-1] outA,
+   output wire[0:`WORD_LENGTH-1] outB,
+   output wire[0:`WORD_LENGTH-1] outX,
+
+   input  wire                   sClock,
+   input  wire                   sEnable,
+   input  wire                   sIn,
+   output wire                   sOut
+
+   );
+
+   wire w1, w2, w3, w4, w5;
+
+   ScanRegUnit iaSeg (  .clk( clk ), 
+                        .rst( rst ), 
+                        
+                        .d( inP ), 
+                        .q( outP ), 
+                       
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( sIn ), 
+                        .sOut( w1 )
+                     );
+
+   ScanRegUnit iaOfs (  .clk( clk ), 
+                        .rst( rst ), 
+                        
+                        .d( inO ), 
+                        .q( outO ), 
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w1 ), 
+                        .sOut( w2 )
+                     );
+
+   ScanRegUnit instr (  .clk( clk ), 
+                        .rst( rst ), 
+                        
+                        .d( inI ), 
+                        .q( outI ), 
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( sw2 ), 
+                        .sOut( w3 )
+                     );
+
+   ScanRegUnit valA  (  .clk( clk ), 
+                        .rst( rst ), 
+         
+                        .d( inA ), 
+                        .q( outA ), 
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w3 ), 
+                        .sOut( w4 )
+                     );
+
+   ScanRegUnit valB  (  .clk( clk ), 
+                        .rst( rst ), 
+                        
+                        .d( inB ), 
+                        .q( outB ), 
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w4 ), 
+                        .sOut( w5 )
+                     );
+
+   ScanRegUnit valX  (  .clk( clk ), 
+                        .rst( rst ), 
+                        
+                        .d( inX ), 
+                        .q( outX ), 
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w5 ), 
+                        .sOut( sOut )
+                     );
+
+endmodule
+
+
+//------------------------------------------------------------------------------------------------------------
+// Pipeline register: MA to EX Stage. The MA-EX pipeline register is between the memory access and the execute
+// stage. Internally we have instances for each of the register parts.
+//
+//------------------------------------------------------------------------------------------------------------
+module PregMaEx ( 
+
+   input  wire                   clk,
+   input  wire                   rst,
+  
+   input  wire[0:`WORD_LENGTH-1] inP, // in_PregMaEx_P PregMaEx_P_in
+   input  wire[0:`WORD_LENGTH-1] inO,
+   input  wire[0:`WORD_LENGTH-1] inI,
+   input  wire[0:`WORD_LENGTH-1] inA,
+   input  wire[0:`WORD_LENGTH-1] inB,
+   input  wire[0:`WORD_LENGTH-1] inX,
+   input  wire[0:`WORD_LENGTH-1] inS,
+
+   output wire[0:`WORD_LENGTH-1] outP, // regMaEx_P_out
+   output wire[0:`WORD_LENGTH-1] outO,
+   output wire[0:`WORD_LENGTH-1] outI,
+   output wire[0:`WORD_LENGTH-1] outA,
+   output wire[0:`WORD_LENGTH-1] outB,
+   output wire[0:`WORD_LENGTH-1] outX, 
+   output wire[0:`WORD_LENGTH-1] outS,
+   
+   input  wire                   sClock,
+   input  wire                   sEnable,
+   input  wire                   sIn,
+   output wire                   sOut
+
+   );
+
+   wire w1, w2, w3, w4, w5, w6;
+
+   ScanRegUnit iaSeg (  .clk( clk ), 
+                        .rst( rst ), 
+                        
+                        .d( inP ), 
+                        .q( outP ), 
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( sIn ), 
+                        .sOut( w1 )
+                     );
+
+   ScanRegUnit iaOfs (  .clk( clk ), 
+                        .rst( rst ), 
+                        
+                        .d( inO ),              
+                        .q( outO ), 
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w1 ), 
+                        .sOut( w2 )
+                     );
+
+   ScanRegUnit instr (  .clk( clk ), 
+                        .rst( rst ), 
+   
+                        .d( inI ), 
+                        .q( outI ), 
+    
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w2 ),  
+                        .sOut( w3 )
+                     );
+   
+   ScanRegUnit valA  (  .clk( clk ), 
+                        .rst( rst ), 
+   
+                        .d( inA ),
+                        .q( outA ), 
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w3 ),  
+                        .sOut( w4 )
+                     );
+
+   ScanRegUnit valB  (  .clk( clk ), 
+                        .rst( rst ), 
+   
+                        .d( inB ), 
+                        .q( outB ), 
+                        
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w4 ),
+                        .sOut( w5 )
+      );
+
+   ScanRegUnit valX  (  .clk( clk ),
+                        .rst( rst ), 
+   
+                        .d( inX ),
+                        .q( outX ),
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w5 ), 
+                        .sOut( w6 )
+      );
+   
+   ScanRegUnit valS  (  .clk( clk ), 
+                        .rst( rst ), 
+   
+                        .d( inS ),  
+                        .q( outS ), 
+
+                        .sClock( sClock ),
+                        .sEnable( sEnable ),
+                        .sIn( w6 ),  
+                        .sOut( sOut ));
+
+endmodule
+
+
+//------------------------------------------------------------------------------------------------------------
+// Before the next instruction is fetched, the address needs to be selected. It could be the current address
+// incremented by four, a branch target or an excepetion handler instruction. Depending on the instruction, 
+// the pipeline stages produce the next instruction address value. The FD stage is will directly compute the
+// next instruction offset and in case of a conditional branch instruction a new instruction offset. The MA 
+// stage  will produce the next instruction offset for unconditional branch instrucutions. FD and MA stage do
+//  not change the instruction segment. The EX stage will potentially set a new segment and offset.
+//
+//    0 - instruction offset "inFdO" is incremented by "inFdOfs". "inFdP" selected.
+//    1 - instruction offset "inMaO" and "inFdP" selected.
+//    2 - instruction offset "inExO" and "inExP" selected.
+//    3 - RESET vector.  
+//
+// Note that the setting of a new instruction address will perhaps also require to flush the pipeline. This
+// is not handled in this module. All it does is to compute the next instruction address from the inputs of
+// the pipeline stages.
+//
+//------------------------------------------------------------------------------------------------------------
+module SelectNextInstrAdr( 
+
+   input    wire                    clk,
+   input    wire                    rst,
+   input    wire[0:1]               sel,
+
+   input    wire[0:`WORD_LENGTH-1]  inFdP,
+   input    wire[0:`WORD_LENGTH-1]  inFdO,
+   input    wire[0:`WORD_LENGTH-1]  inFdOfs,
+
+   input    wire[0:`WORD_LENGTH-1]  inMaO,
+
+   input    wire[0:`WORD_LENGTH-1]  inExP,
+   input    wire[0:`WORD_LENGTH-1]  inExO,
+
+   output   wire[0:`WORD_LENGTH-1]  outP,
+   output   wire[0:`WORD_LENGTH-1]  outO 
+
+   );
+
+   wire[0:`WORD_LENGTH-1] tmpOfs;
+
+   reg [0:1] tmpSel;
+
+   AdderUnit   U0 (  .a( inFdO ), .b( inFdOfs ), .inC( 1'b0 ), .s( tmpOfs )); 
+
+   Mux_4_1     U1 (  .a0( inFdP ), 
+                     .a1( inExP ), 
+                     .a2( `WORD_LENGTH'h0 ),
+                     .a3( `RESET_IA_SEG ),
+                     .sel( tmpSel ), 
+                     .enb( 1'b1 ), 
+                     .y( outP ));
+
+   Mux_4_1     U2 (  .a0( { 2'b00, tmpOfs[2:`WORD_LENGTH-1] } ), 
+                     .a1( inMaO ), 
+                     .a2( inExO ), 
+                     .a3( `RESET_IA_OFS ), 
+                     .sel( tmpSel ), 
+                     .enb( 1'b1 ), 
+                     .y( outO ));
+
+
+   always @( posedge clk or negedge rst ) begin
+
+      if ( ~ rst )   tmpSel = 2'b11;
+      else           tmpSel = sel;
+   
+   end
+
+endmodule
+
+
+//------------------------------------------------------------------------------------------------------------
+// L1 instruction cache. The CPU features two L1 caches, instruction and data. The instruction cache is a 
+// two-way set associative array using a LRU scheme for replacement. The cache is a write back type cache 
+// with a default cache line size of four machine words.
+//
+// The unit has a set of arrays. There are two sets with bit arrays for the valid, dirty and lru bits and 
+// cache tag and data. The data array is holds the actual cache line data with a word length of C_BLOCK_SIZE.
+// Depending on the block size and the number of cache line entries, the tag has a number of bits.
+//
+// The cache controller is designed to return the data in case of a HIT within the same cycle. If the data
+// is not in the cache, the cache line needs to be allocated. If we have an invalid entry in one of the sets, 
+// just use it. If not, one of the cache line entry needs ot be allocated. The LRU bit indicates which one
+// we will select. 
+//
+// The cache also contains the logic to compare the tag with the TLB tag data. We cannot perform an update
+// on cache data before we know that it is truly the physical block that matches the TLB and cache tag.
+// When address translation is turned off, the "tlbTag" paramater shild just contains the physical address
+// that is to be accessed. CPU-ID and memory bank are by definition zero in this case.
+//
+// ??? should we rather define a two and four way cache to be used as see fit ?
+// ??? do we need to support a write operation for an instruction cache ?
+// ??? need a kind of protocol when memory is ready ...
+// ??? how to do statistics ? could do a ton of counters, but how expensive is this ?
+// ??? what would we do with a machine that has word and byte values ?
+//------------------------------------------------------------------------------------------------------------
+module ICacheUnit #(
+
+   parameter   C_ENTRIES         = 1024,
+               TLB_TAG_WIDTH     = 20
+   
+   ) ( 
+
+   input    wire                                clk, 
+   input    wire                                rst,
+   input    wire[0:`WORD_LENGTH-1]              vSeg,
+   input    wire[0:`WORD_LENGTH-1]              vOfs,
+   input    wire[0:TLB_TAG_WIDTH-1]             tlbTag,
+   input    wire[0:`WORD_LENGTH-1]              dataInCpu,
+   input    wire                                cReadOp,
+   input    wire                                cWriteOp,
+   input    wire                                cFlushOp,
+   input    wire                                cPurgeOp,
+
+   input    wire[0:C_BLOCK_SIZE*`WORD_LENGTH-1] dataInMem,                             
+
+   output   wire                                stallCpu, 
+   output   wire[0:`WORD_LENGTH-1]              dataOutCpu,
+   output   wire                                mReadOp,
+   output   wire                                mWriteOp,
+   output   wire[0:3]                           mAdrCpuId,
+   output   wire[0:3]                           mAdrBank,
+   output   wire[0:`WORD_LENGTH-1]              mAdrOfs,
+   output   wire[0:C_BLOCK_SIZE*`WORD_LENGTH-1] dataOutMem         
+   
+   );
+
+   //---------------------------------------------------------------------------------------------------------
+   // The state machine states. A cache can be in the IDLE stage, ALLOCATEing a cache block or WRITE_BACK the
+   // cache block.
+   //
+   //---------------------------------------------------------------------------------------------------------
+   localparam  C_IDLE            = 3'b001;
+   localparam  C_ALLOCATE        = 3'b010;
+   localparam  C_WRITE_BACK      = 3'b100;
+   
+   //---------------------------------------------------------------------------------------------------------
+   // Cache tag and indexing declarations. The virtual address offset is split into the the offset into the 
+   // block, the block index and the tag portion. Note that we also store the CPU Id and the memory bank
+   // offset in the tag. As we return this data, the pipeline stage will use this information to check with 
+   // the TLB data, whether we have a real match. The cache is however not concerned with these two fields.
+   //
+   //---------------------------------------------------------------------------------------------------------
+   `define     C_BLOCK_INDX      12:29  // muts match the cache size..
+   `define     C_BLOCK_OFS       30:31
+
+   wire[`C_BLOCK_INDX]           wBlockIndex;
+   wire[`C_BLOCK_OFS]            wBlockOfs;
+
+   assign wBlockIndex   = vOfs[`C_BLOCK_INDX];
+   assign wBlockOfs     = vOfs[`C_BLOCK_OFS];
+
+   //---------------------------------------------------------------------------------------------------------
+   //
+   // ??? need field declarations for the tag field. What will be compared, etc. ?
+   // ??? TAG is: 4-bit CPU-ID, 4-bit Memory Bank, 32 - blockIndexBits - blockBits;  
+   //---------------------------------------------------------------------------------------------------------
+   localparam  C_TAG_WIDTH = TLB_TAG_WIDTH;
+
+   //---------------------------------------------------------------------------------------------------------
+   // A block is a set of four machine words. The declarations allow to access the correct word in the block.
+   //
+   //---------------------------------------------------------------------------------------------------------
+   localparam                    C_BLOCK_SIZE      = 4;
+
+   `define     C_WORD_1          0:31
+   `define     C_WORD_2          32:63
+   `define     C_WORD_3          64:95
+   `define     C_WORD_4          95:127
+
+   //---------------------------------------------------------------------------------------------------------
+   // The cache data structures. There are two sets each of which cointain an array for the valid bit, the
+   // dirty bit, the LRU bit, the tag and data array.
+   //
+   //---------------------------------------------------------------------------------------------------------
+   reg                                 validBitArray1[0:C_ENTRIES-1];
+   reg                                 dirtyBitArray1[0:C_ENTRIES-1];
+   reg                                 lruBitArray1[0:C_ENTRIES-1];
+   reg[0:C_TAG_WIDTH-1]                tagArray1[0:C_ENTRIES-1];
+   reg[0:C_BLOCK_SIZE*`WORD_LENGTH]    dataArray1[0:C_ENTRIES-1];
+
+   reg                                 validBitArray2[0:C_ENTRIES-1];
+   reg                                 dirtyBitArray2[0:C_ENTRIES-1];
+   reg                                 lruBitArray2[0:C_ENTRIES-1];
+   reg[0:C_TAG_WIDTH-1]                tagArray2[0:C_ENTRIES-1];
+   reg[0:C_BLOCK_SIZE*`WORD_LENGTH]    dataArray2[0:C_ENTRIES-1];
+
+
+   //---------------------------------------------------------------------------------------------------------
+   //
+   //
+   //---------------------------------------------------------------------------------------------------------
+   reg[0:`WORD_LENGTH-1]               dataOutVal;
+   reg[0:4]                            cState = C_IDLE;
+
+   integer i;
+   
+   assign dataOutCpu    = dataOutVal;
+   
+
+   //---------------------------------------------------------------------------------------------------------
+   // The cache controller state machine. On a reset signal, we clear the valid, dirty and lru data. No need
+   // to also clear the tag and data array. If an operation requested, the block indexed is checked for being
+   // valid with the matching tag. 
+   //
+   // 
+   //
+   //
+   //---------------------------------------------------------------------------------------------------------
+   always @( posedge clk or negedge rst ) begin 
+
+      if ( ~ rst ) begin
+         
+         for ( i = 0; i < C_ENTRIES; i = i + 1 ) begin
+      
+            validBitArray1[ i ]  = 0;
+            dirtyBitArray1[ i ]  = 0;
+            lruBitArray1[ i ]    = 0;
+
+            validBitArray2[ i ]  = 0;
+            dirtyBitArray2[ i ]  = 0;
+            lruBitArray2[ i ]    = 0;
+     
+         end
+
+      end else begin
+
+         case ( 1'b1 ) 
+
+            cState[C_IDLE]: begin
+
+               if (( ~ cReadOp ) && ( ~ cWriteOp ) && ( ~ cFlushOp ) && ( ~ cPurgeOp )) begin
+               
+                  cState <= C_IDLE;
+
+               end else if ( validBitArray1[ wBlockIndex ] && matchTag( tlbTag, tagArray1[ wBlockIndex ])) begin
+
+                  if ( cReadOp ) begin
+
+                        dataOutVal =   ( wBlockOfs == 2'b00 ) ? dataArray1[ wBlockIndex ] [`C_WORD_1] :
+                                       ( wBlockOfs == 2'b01 ) ? dataArray1[ wBlockIndex ] [`C_WORD_2] :
+                                       ( wBlockOfs == 2'b10 ) ? dataArray1[ wBlockIndex ] [`C_WORD_3] : 
+                                                                dataArray1[ wBlockIndex ] [`C_WORD_4];       
+
+                  end else if ( cWriteOp ) begin
+
+                     dirtyBitArray1[wBlockIndex] <= 1'b1;
+
+                     if       (  wBlockOfs == 2'b00 ) dataArray1[ wBlockIndex ] [`C_WORD_1] <= dataInCpu;
+                     else if  (  wBlockOfs == 2'b01 ) dataArray1[ wBlockIndex ] [`C_WORD_2] <= dataInCpu;
+                     else if  (  wBlockOfs == 2'b10 ) dataArray1[ wBlockIndex ] [`C_WORD_3] <= dataInCpu;
+                     else                             dataArray1[ wBlockIndex ] [`C_WORD_4] <= dataInCpu;
+
+                  end else if ( cFlushOp ) begin
+                     
+                     cState = C_WRITE_BACK;
+
+                  end else if ( cPurgeOp ) begin
+
+                     validBitArray1[ wBlockIndex ] <= 0;
+
+                  end
+
+                  lruBitArray1[ wBlockIndex ] <= 0;
+                  lruBitArray2[ wBlockIndex ] <= 1;
+                  
+               end else if ( validBitArray2[ wBlockIndex ] && matchTag( tlbTag, tagArray2[ wBlockIndex ])) begin
+                  
+                  if ( cReadOp ) begin
+
+                        dataOutVal =   ( wBlockOfs == 2'b00 ) ? dataArray2[ wBlockIndex ] [`C_WORD_1] :
+                                       ( wBlockOfs == 2'b01 ) ? dataArray2[ wBlockIndex ] [`C_WORD_2] :
+                                       ( wBlockOfs == 2'b10 ) ? dataArray2[ wBlockIndex ] [`C_WORD_3] : 
+                                                                dataArray2[ wBlockIndex ] [`C_WORD_4];                  
+
+                  end else if ( cWriteOp ) begin
+
+                     dirtyBitArray2[wBlockIndex] <= 1'b1;
+
+                     if       (  wBlockOfs == 2'b00 ) dataArray2[ wBlockIndex ] [`C_WORD_1] <= dataInCpu;
+                     else if  (  wBlockOfs == 2'b01 ) dataArray2[ wBlockIndex ] [`C_WORD_2] <= dataInCpu;
+                     else if  (  wBlockOfs == 2'b10 ) dataArray2[ wBlockIndex ] [`C_WORD_3] <= dataInCpu;
+                     else                             dataArray2[ wBlockIndex ] [`C_WORD_4] <= dataInCpu;
+
+                  end else if ( cFlushOp ) begin
+                     
+                     cState = C_WRITE_BACK;
+
+                  end else if ( cPurgeOp ) begin
+
+                     validBitArray2[ wBlockIndex ] <= 0;
+
+                  end
+
+                  lruBitArray1[ wBlockIndex ] <= 1;
+                  lruBitArray2[ wBlockIndex ] <= 0;
+
+               end else begin 
+
+                  // ??? do the decision for WRITE_BACK or ALLOCATE here ?
+
+                  if ( cReadOp || cWriteOp ) cState = C_ALLOCATE;
+
+               end
+
+            end 
+
+            cState[C_ALLOCATE]: begin 
+
+
+               // ??? we have a miss, callocate a free block
+               // ??? how do we access memory ? a new state ?
+               // ??? set the next state in any case ?
+
+               if ( ~ validBitArray1[ wBlockIndex ] ) begin
+                  
+                   // use set 1, invalid
+                   // just a MEM fetch
+
+               end else if ( ~ validBitArray2[ wBlockIndex ] ) begin
+
+                  // use set 2, invalid
+                  // just a MEM fetch
+                  
+               end else if ( lruBitArray1[ wBlockIndex ] == 1 ) begin
+
+                  if ( dirtyBitArray1[ wBlockIndex ] ) begin
+
+                      cState = C_WRITE_BACK;
+                     
+                  end
+
+                  // use set 1, LRU
+                  
+               end else if ( lruBitArray2[ wBlockIndex ] == 1 ) begin
+                  
+                 
+                  if ( dirtyBitArray2[ wBlockIndex ] ) begin
+
+                     cState = C_WRITE_BACK;
+                     
+                  end
+
+                   // use set 2, LRU
+                 
+               end
+
+            end
+
+            cState[C_WRITE_BACK]: begin
+
+
+
+               // ??? write back the block assumed to be dirty, mark the block invalid
+               
+
+            end 
+
+            default: begin
+
+            end
+
+         endcase 
+
+      end
+
+   end
+
+   function matchTag;
+
+      input[0:TLB_TAG_WIDTH-1]   tlbTag;
+      input[0:C_TAG_WIDTH-1]     cacheTag;
+
+      begin
+
+         matchTag = ( tlbTag == cacheTag );
+
+      end
+
+   endfunction
+
+endmodule
+
+
+//------------------------------------------------------------------------------------------------------------
+// L1 data cache. The CPU features two L1 caches, instruction and data. The data cache is a four-way set 
+// associative cache, very similar to the instruction cache. There are however four instead of two sets
+// and the LRU array has two bits per entry.
+//
+// ??? how to do statistics ? could do a ton of counters, but how expensive is this ?
+//------------------------------------------------------------------------------------------------------------
+module DCacheUnit #(
+
+   parameter C_ENTRIES    = 1024,
+   parameter C_TAG_WIDTH  = 32,
+   parameter C_BLOCK_SIZE = 4
+
+   ) ( 
+
+   input    wire                                clk, 
+   input    wire                                rst,
+
+   input    wire[0:`WORD_LENGTH-1]              vSeg,
+   input    wire[0:`WORD_LENGTH-1]              vOfs,
+   input    wire[0:`WORD_LENGTH-1]              dataInCpu,
+   input    wire                                cReadOp,
+   input    wire                                cWriteOp,    
+   input    wire[0:C_BLOCK_SIZE*`WORD_LENGTH-1] dataInMem,                             
+
+   output   wire                                stallCpu, 
+   output   wire[0:`WORD_LENGTH-1]              dataOutCpu,
+   output   wire                                mReadOp,
+   output   wire                                mWriteOp,
+   output   wire[0:3]                           mAdrCpuId,
+   output   wire[0:3]                           mAdrBank,
+   output   wire[0:`WORD_LENGTH-1]              mAdrOfs,
+   output   wire[0:C_BLOCK_SIZE*`WORD_LENGTH-1] dataOutMem         
+   
+   );
+
+   parameter SETS = 4;
+
+   parameter IDLE = 1'b0;
+   parameter MISS = 1'b1;
+
+   // ??? need more states for allocate and write back ?
+
+   reg                                 validBitArray1[0:C_ENTRIES-1];
+   reg                                 dirtyBitArray1[0:C_ENTRIES-1];
+   reg[0:1]                            lruBitsArray1[0:C_ENTRIES-1];
+   reg[0:C_TAG_WIDTH-1]                tagArray1[0:C_ENTRIES-1];
+   reg[0:C_BLOCK_SIZE*`WORD_LENGTH]    dataArray1[0:C_ENTRIES-1];
+
+   reg                                 validBitArray2[0:C_ENTRIES-1];
+   reg                                 dirtyBitArray2[0:C_ENTRIES-1];
+   reg[0:1]                            lruBitsArray2[0:C_ENTRIES-1];
+   reg[0:C_TAG_WIDTH-1]                tagArray2[0:C_ENTRIES-1];
+   reg[0:C_BLOCK_SIZE*`WORD_LENGTH]    dataArray2[0:C_ENTRIES-1];
+
+   reg                                 validBitArray3[0:C_ENTRIES-1];
+   reg                                 dirtyBitArray3[0:C_ENTRIES-1];
+   reg[0:1]                            lruBitsArray3[0:C_ENTRIES-1];
+   reg[0:C_TAG_WIDTH-1]                tagArray3[0:C_ENTRIES-1];
+   reg[0:C_BLOCK_SIZE*`WORD_LENGTH]    dataArray3[0:C_ENTRIES-1];
+
+   reg                                 validBitArray4[0:C_ENTRIES-1];
+   reg                                 dirtyBitArray4[0:C_ENTRIES-1];
+   reg[0:1]                            lruBitsArray4[0:C_ENTRIES-1];
+   reg[0:C_TAG_WIDTH-1]                tagArray4[0:C_ENTRIES-1];
+   reg[0:C_BLOCK_SIZE*`WORD_LENGTH]    dataArray4[0:C_ENTRIES-1];
+
+   integer i;
+
+   reg cState = IDLE;
+
+
+   always @( posedge clk or negedge rst ) begin 
+
+       if ( ~ rst ) begin
+         
+         for ( i = 0; i < C_ENTRIES; i = i + 1 ) begin
+      
+            validBitArray1[ i ]  = 0;
+            dirtyBitArray1[ i ]  = 0;
+            lruBitsArray1[ i ]   = 0;
+
+            validBitArray2[ i ]  = 0;
+            dirtyBitArray2[ i ]  = 0;
+            lruBitsArray2[ i ]   = 0;
+
+            validBitArray3[ i ]  = 0;
+            dirtyBitArray3[ i ]  = 0;
+            lruBitsArray3[ i ]   = 0;
+
+            validBitArray4[ i ]  = 0;
+            dirtyBitArray4[ i ]  = 0;
+            lruBitsArray4[ i ]   = 0;
+
+         end
+     
+      end else begin
+
+
+      // ??? fill in when the I-cache is completed... leverage...
+
+      end
+
+   end 
+
+endmodule
+
+
+//------------------------------------------------------------------------------------------------------------
+// The memory interface units is the interface betwen the I and D cache and the memory. There are two channels
+// with channel "1" having priority over channel "2".
+//
+// ??? to do ...
+//------------------------------------------------------------------------------------------------------------
+module MemoryInterface #(
+
+   parameter M_BLOCK_SIZE = 4
+
+   ) ( 
+
+   input    wire                                clk, 
+   input    wire                                rst,
+
+   input    wire                                mReadOp1,
+   input    wire                                mWriteOp1,
+   input    wire[0:M_BLOCK_SIZE*`WORD_LENGTH-1] mDataIn1,  
+
+   input    wire                                mReadOp2,
+   input    wire                                mWriteOp2,
+   input    wire[0:M_BLOCK_SIZE*`WORD_LENGTH-1] mDataIn2,  
+
+   output   wire                                mReady1, 
+   output   wire[0:3]                           mAdrCpuId1,
+   output   wire[0:3]                           mAdrBank1,
+   output   wire[0:`WORD_LENGTH-1]              mAdrOfs1,
+   output   wire[0:M_BLOCK_SIZE*`WORD_LENGTH-1] mDataOut1,   
+
+   output   wire                                mReady2, 
+   output   wire[0:3]                           mAdrCpuId2,
+   output   wire[0:3]                           mAdrBank2,
+   output   wire[0:`WORD_LENGTH-1]              mAdrOfs2,
+   output   wire[0:M_BLOCK_SIZE*`WORD_LENGTH-1] mDataOut2   
+    
+   );
+
+   // arbitrate between channel 1 and 2
+   // data may be fetched in smaller chunks and then take more cycles...
+
+
+endmodule 
+
+
+//------------------------------------------------------------------------------------------------------------
+// Content addressable memory. The instruction/data TLB will be implemented as a 16-entry dual ported fully 
+// associative memory structure. 
+//
+// The content is a 37bit structure:
+//
+//    bit 0:               -> valid bit
+//    bit 1..WDITH - 1:    -> virtual page number.
+//
+// The code has two major parts. The first compares all the entries for the the pattern. A positive result 
+// will set the corresponding matchline. Next, the matchline is converted to the entry address using a 
+// priority encoder. 
+//
+// ??? split pattern in the parts needed ?
+// ??? change for 32-bit words, a virtual page is 16 + 32 - 14 = 34 bits
+//------------------------------------------------------------------------------------------------------------
+module DualPortedCamUnit_16 #(
+
+   parameter WIDTH = 36
+  
+   ) ( 
+
+   input    wire              clk, 
+   input    wire              rst,
+   input    wire[0:WIDTH - 1] patternA,
+   input    wire[0:WIDTH - 1] patternB, 
+   input    wire[0:3]         writeAdr, 
+   input    wire              wEnable,
+   output   wire[0:3]         matchAdrA, 
+   output   wire[0:3]         matchAdrB, 
+   output   wire              mFoundA, 
+   output   wire              mFoundB 
+
+   );
+
+   reg [0:WIDTH]  ram [0:15];
+   wire[0:15]     matchLineA;
+   wire[0:15]     matchLineB;
+
+   always @ ( posedge clk or negedge rst ) begin
+
+      if ( ~ rst ) begin
+
+         for ( integer k = 0; k < 15; k = k + 1 ) ram[ k ] = 0;
+
+      end else begin
+         
+         if ( wEnable ) ram[ writeAdr ] <= { 1'b1, patternA };
+      end
+ 
+   end
+
+   for ( genvar i = 0; i < 15; i = i + 1 ) begin
+      
+      assign matchLineA[ i ] = ( ram[ i ] == { 1'b1, patternA } );
+   
+   end
+
+   for ( genvar j = 0; j < 15; j = j + 1 ) begin
+
+      assign matchLineB[ j ] = ( ram[ j ] == { 1'b1, patternB } );
+   
+   end
+
+   assign mFoundA = |matchLineA;
+   assign mFoundB = |matchLineB;
+
+   Encoder_16_4 encA ( .a( matchLineA ), .y( matchAdrA ));
+   Encoder_16_4 encB ( .a( matchLineA ), .y( matchAdrA ));
+
+endmodule
+
+
+
+
+
+//------------------------------------------------------------------------------------------------------------
+// "TestCondUnit" tests the input word according to the condition selected. The defined conditions are
+//
+//    0 - EQ   -> a == 0
+//    1 - NE   -> a != 0
+//    2 - LT   -> a < 0
+//    3 - GT   -> a >= 0
+//    4 - LE   -> a <= 0
+//    5 - GE   -> a >= 0
+//    6 - EV   -> a is even
+//    7 - OD   -> a is odd
+//
+//
+// ??? we need to match to what the instructions need....
+//------------------------------------------------------------------------------------------------------------
+module TestCondUnit #( 
+
+   parameter WIDTH = `WORD_LENGTH
+
+   ) (
+
+   input  wire [0:WIDTH-1] a,
+   input  wire [0:2]       op,
+   output reg              y
+
+   );
+
+   wire z = ( a == 0 );
+
+   always @ (*) begin
+
+         case ( op )
+      
+            3'd00 :  y = z;                     // data == 0
+            3'd01 :  y = ~ z;                   // data != 0
+            3'd02 :  y = a[0];                  // data < 0 
+            3'd03 :  y = ( ~ a[0] ) & ( ~z );   // data > 0 
+            3'd04 :  y = a[0] || z;             // data <= 0 
+            3'd05 :  y = ( ~ a[0] ) || z;       // data >= 0 
+            3'd06 :  y = ~ a[ WIDTH-1];         // even
+            3'd07 :  y = a[ WIDTH-1 ];          // odd
+            default: y = 0;
+           
+         endcase
+
+   end
+
+endmodule
+
+
+
+
+
+//------------------------------------------------------------------------------------------------------------
+// Clock divider by two. The module takes the master clock and creates a clock rate divided by two.
+//
+//------------------------------------------------------------------------------------------------------------
+module DivideByTwoUnit ( 
+
+   input  wire clk,
+   input  wire rst,
+   output reg  hClk
+
+   );
+
+   always @ ( posedge clk ) begin
+   
+      if ( ~ rst )   hClk <= 0;
+      else           hClk <= ~ hClk;
+
+   end
+
+endmodule
+
+
+//------------------------------------------------------------------------------------------------------------
+// Generic Clock divider. The generic clock divider implenents a divider with a configurable divide count.
+//
+//------------------------------------------------------------------------------------------------------------
+module ClkDivideUnit #( 
+
+   parameter DIV = 2
+
+   ) ( 
+
+   input    wire  clk,
+   input    wire  rst,
+   output   reg   dClk 
+
+   );
+
+   localparam  tCount = ( DIV - 1 );
+
+   reg [0:15]  count;
+   wire        tc;
+
+   assign tc = ( count == tCount );
+
+   always @ ( posedge clk ) begin
+      
+      if       ( ~rst ) count <= 0;
+      else if  ( tc )   count <= 0;
+      else              count <= count + 1;
+   end
+
+   always @ ( posedge clk ) begin
+      
+      if       ( rst )  dClk <= 0;
+      else if  ( tc )   dClk <= ~ dClk;
+      
+   end
+
+endmodule
 

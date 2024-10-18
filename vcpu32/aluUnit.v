@@ -82,6 +82,14 @@ endmodule
 // case, the err line my not be necessary.
 //
 //
+// The execte substage is the place where we deal with overflows.
+//
+// addition signed
+// (( ~ a[0] ) & ( ~ b[0] ) & ( s[0] )) | (( a[0] ) & ( b[0] ) & ( ~ s[0] )) 
+//
+// subtraction signed
+// (( ~ a[0] ) & ( b[0] ) & ( s[0] )) | (( a[0] ) & ( ~ b[0] ) & ( ~ s[0] )) 
+//
 // ??? rework.....
 //------------------------------------------------------------------------------------------------------------
 module AluUnit_old (
@@ -231,7 +239,8 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 // "extractUnit32" is the logic for the extract operation. A bit field specified by the rightmost position 
 // "pos" and a length "len" extending to the left will be extracted. If the sign option is set, the extracted
-// bit field is sign extended, 
+// bit field is sign extended. This module can also be used to implement a variable sign extension function 
+// of a value. It is just a sign extension of a right justified field of "len".
 //
 //------------------------------------------------------------------------------------------------------------
 module extractUnit32( 
