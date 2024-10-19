@@ -144,7 +144,7 @@ endmodule
 
 //------------------------------------------------------------------------------------------------------------
 // The Adder is a simple adder of two unsigned numbers including a carry in for multi-precision arithmetic.  
-// Any interpretation of signd or unsigned must be handled in the instantiating layer. The Adder unit is
+// Any interpretation of signed or unsigned must be handled in the instantiating layer. The Adder unit is
 // implemented in behavioral verilog. There is also a version which explicitly implements a carry lookahead
 // adder.
 //
@@ -170,7 +170,7 @@ endmodule
 
 //------------------------------------------------------------------------------------------------------------
 // The Incrementer unit is a simple adder of two unsigned numbers including a carry in for multi-precision
-// arithmetic. Any interpretation of signd or unsigned must be handled in the instantiating layer. The unit
+// arithmetic. Any interpretation of signed or unsigned must be handled in the instantiating layer. The unit
 // is implemented in behavioral verilog.
 //
 //------------------------------------------------------------------------------------------------------------

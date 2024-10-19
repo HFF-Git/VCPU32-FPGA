@@ -18,28 +18,41 @@
 
 //------------------------------------------------------------------------------------------------------------
 // The fetch and decode stage is a two part stage. The first part will access the instruction memory interface
-// and obtain the instruction. The secpnd part will dcode the instruction and prepare the information to 
-// access the generaö register file.
+// and obtain the instruction. The second part will decode the instruction and prepare the information to 
+// access the general register file.
 //
+// 
 //------------------------------------------------------------------------------------------------------------
 module FetchDecodeStage( 
    
-    input   logic                   clk,
-    input   logic                   rst, 
+    input   logic                       clk,
+    input   logic                       rst, 
     
-    input   logic[`WORD_LENGTH-1:0] inPstate0,
-    input   logic[`WORD_LENGTH-1:0] inPstate1,
+    input   logic[`WORD_LENGTH-1:0]     inPstate0,
+    input   logic[`WORD_LENGTH-1:0]     inPstate1,
 
-    input   logic[`WORD_LENGTH-1:0] regByPassVal,
+    input   logic[`WORD_LENGTH-1:0]     regByPassVal,
     
-    output  logic[`WORD_LENGTH-1:0] outPstate0,
-    output  logic[`WORD_LENGTH-1:0] ourPstate1,
-    output  logic[`WORD_LENGTH-1:0] instr,
-    output  logic[`WORD_LENGTH-1:0] valA,
-    output  logic[`WORD_LENGTH-1:0] valB,
-    output  logic[`WORD_LENGTH-1:0] valX
+    output  logic[`WORD_LENGTH-1:0]     outPstate0,
+    output  logic[`WORD_LENGTH-1:0]     ourPstate1,
+    output  logic[`WORD_LENGTH-1:0]     instr,
 
-    // general register write back interface ?
+    // ??? interface to the GREG register file
+
+    output  logic[3:0]                  readRegIdA,
+    input   logic[`WORD_LENGTH-1:0]     readRegA,
+
+    output  logic[3:0]                  readRegIdB,
+    input   logic[`WORD_LENGTH-1:0]     readRegB,
+
+    output  logic[3:0]                  readRegIdX, 
+    input   logic[`WORD_LENGTH-1:0]     readRegX,
+
+    // ??? pipeline output regs values
+    
+    output  reg[`WORD_LENGTH-1:0]       valA,
+    output  reg[`WORD_LENGTH-1:0]       valB,
+    output  reg[`WORD_LENGTH-1:0]       valX
 
     // Trap interface ?
 
@@ -49,205 +62,87 @@ module FetchDecodeStage(
   
     );
 
-    Register                instrReg ( .clk( clk ), .rst( rst ), .d( ), .q( instr ) );
-
-    logic[`WORD_LENGTH-1:0] readDataA, readDataB, readDataX, writeDataR, writeDataX, immVal;
-    logic[3:0]              readAddrA, readAddrB, readAddrX, writeAddrR, writeAddrX;
-
-    Register_file_3R_2W     gregFile (  .clk( clk ), 
-                                        .rst( rst),  
-                                        .readAddr1( readAddrA ),
-                                        .readData1( readDataA ),
-                                        .readAddr2( readAddrB ),
-                                        .readData2( readDataB ),
-                                        .readAddr3( readAddrX ),
-                                        .readData3( readDataX ),
-
-                                        .writeAddr1( writeAddrR ),
-                                        .writeData1( writeDataR ),
-                                        .writeAddr2( writeAddrX ),
-                                        .writeData2( writeDataX )
-                                        
-                                        );
-
-    Mux_2_1  #( .WIDTH( `WORD_LENGTH )) muxValA (   .sel( ), 
-                                                    .enb( ), 
-                                                    .a0( regByPassVal ), 
-                                                    .a1( readDataA ), 
-                                                    .y( valA )); 
-
-    Mux_4_1  #( .WIDTH( `WORD_LENGTH )) muxValB (   .sel( ), 
-                                                    .enb( ), 
-                                                    .a0( regByPassVal ), 
-                                                    .a1( readDataB ), 
-                                                    .a2( immVal ), 
-                                                    .a3( ),
-                                                    .y( valB )); 
-                                
-    Mux_4_1  #( .WIDTH( `WORD_LENGTH )) muxValX (   .sel( ), 
-                                                    .enb( ), 
-                                                    .a0( regByPassVal ), 
-                                                    .a1( readDataX ), 
-                                                    .a2( immVal ), 
-                                                    .a3( ),
-                                                    .y( valX ));
-
-    FetchSubStage fetchSubStage (   .clk( clk ),
-                                    .rst( rst ),
-                                    .pState0( ),
-                                    .pState1( ),
-                                    
-                                    .instr( ));
-
-    DecodeSubStage decodeSubStage ( .clk( clk ),
-                                    .rst( rst ),
-                                    .instr( instr ), 
-                                    .regIdA( readAddrA ), 
-                                    .regIdB( readAddrB ), 
-                                    .regIdX( readAddrX ), 
-                                    .immVal( immVal ), 
-                                    .valid( )
-
-
-                                    );
-
-
-endmodule
-
-
-//------------------------------------------------------------------------------------------------------------
-// "fetchSubStage" contains the logic for getting the next instruction.
-//
-//
-//------------------------------------------------------------------------------------------------------------
-module FetchSubStage( 
-
-    input  logic                   clk,
-    input  logic                   rst,
-
-    input  logic[`WORD_LENGTH-1:0] pState0,
-    input  logic[`WORD_LENGTH-1:0] pState1,
-
-    output logic[`WORD_LENGTH-1:0] instr,
-
-    output logic                   valid
-
-    // interface to I-cache
-    // stall signal
-    // trap logic
-
-    );
-
-    always @( negedge rst ) begin
-
-    end
-
-    always @( posedge clk ) begin
-
-    end
-
-endmodule
-
-//------------------------------------------------------------------------------------------------------------
-// "decodeSubStage" decodes the instruction fetched and fetches the values from the general register file.
-//
-//
-//------------------------------------------------------------------------------------------------------------
-module DecodeSubStage( 
-
-    input  logic                   clk,
-    input  logic                   rst,
-
-    input  logic[`WORD_LENGTH-1:0] inPstate0,
-    input  logic[`WORD_LENGTH-1:0] inPstate1,
-    input  logic[`WORD_LENGTH-1:0] instr,
-
-
-    output logic[3:0]               regIdA,
-    output logic[3:0]               regIdB,
-    output logic[3:0]               regIdX,
-    output logic[`WORD_LENGTH-1:0]  immVal,
-
-    output logic                    valid
-   
+    localparam              ZERO            = {`WORD_LENGTH{1'b0}};
     
-    // trap logic
-    // stall logic
-    // next instrcution address logic ?
+    localparam              SEL_ZERO_VAL    = 2'b00;
+    localparam              SEL_NORMAL_REG  = 2'b01;
+    localparam              SEL_BYPASS_REG  = 2'b10;
+    localparam              SEL_IMM_VAL     = 2'b11;
+    
+   
+    //--------------------------------------------------------------------------------------------------------
+    //
+    //
+    //--------------------------------------------------------------------------------------------------------
+   
+    logic[`WORD_LENGTH-1:0]     immVal;
 
-    );
+    logic                       wEnable;
+    logic                       validInstr;
 
-    DecodeLogic decode  (   .instr( instr ), 
-                            .regIdA( regIdA ), 
-                            .regIdB( regIdB ), 
-                            .regIdX( regIdX ), 
-                            .immVal( immVal ), 
-                            .valid( ));
+    //--------------------------------------------------------------------------------------------------------
+    //  
+    //
+    //  ??? set the register values...
+    //--------------------------------------------------------------------------------------------------------
+    always @( posedge clk or negedge rst ) begin
 
-    always @( negedge rst ) begin
+        if ( ! rst ) begin
+
+            // ??? clear all regs...
+
+            valA <= ZERO;
+            valB <= ZERO;
+            valX <= ZERO;
+
+        end else if ( wEnable ) begin 
+
+            // ??? set other regs...
+
+            valA <= ZERO;
+            valB <= ZERO;
+            valX <= ZERO;
+            
+        end 
 
     end
 
-    always @( posedge clk ) begin
+    //--------------------------------------------------------------------------------------------------------
+    // "decode" is the combinatorial logic that decodes from the instruction word for the register numbers 
+    // and the immediate value if there is one in the instruction. If the instruction opCode is not defined, 
+    // the "valid" line is set to zero.
+    //
+    //--------------------------------------------------------------------------------------------------------
+    task decode;
 
-    end
-
-endmodule
-
-//------------------------------------------------------------------------------------------------------------
-// "decodeLogic" is the combinatorila logic that decdes forn the instruction word the register numbers for
-// the general register file. It also decodes the immediate value if there is one in the instruction. If 
-// the instruction opCode is not defined, the "valid" line is set to zero.
-//
-//------------------------------------------------------------------------------------------------------------
-module DecodeLogic ( 
-
-    input  logic[`WORD_LENGTH-1:0]  instr,
-
-    output logic[3:0]               regIdA,
-    output logic[3:0]               regIdB,
-    output logic[3:0]               regIdX,
-    output logic[`WORD_LENGTH-1:0]  immVal,
-    output logic                    valid
-
-    );
-
-    logic [5:0] opCode;
-    logic [1:0] opMode;
-
-    assign opCode     = instr[31:26];
-    assign opMode     = instr[19:18];
-     
-    always @(*) begin 
-
-        regIdA  = 4'b0;
-        regIdB  = 4'b0;
-        regIdX  = 4'b0;
-        immVal  = `WORD_LENGTH'b0;
-        valid   = 1'b1;
-      
-        case ( opCode )
-           
+        readRegIdA      = 4'b0;
+        readRegIdB      = 4'b0;
+        readRegIdX      = 4'b0;
+        immVal          = ZERO;
+        validInstr      = 1'b1;
+    
+        case ( instr[31:26] )
+        
             `OP_ADD, `OP_ADC, `OP_SBC, `OP_SUB, `OP_AND, `OP_OR, `OP_XOR, `OP_CMP: begin
 
-                case ( opMode ) 
+                case ( instr[19:18] ) 
 
                     2'b00: begin 
 
-                        regIdA = instr[25:22];
-                        immVal = {{ 15{ instr[0]}}, { instr[17:0] }};
+                        readRegIdA  = instr[25:22];
+                        immVal      = {{ 15{ instr[0]}}, { instr[17:0] }};
                     end
 
                     2'b01,  2'b10: begin 
 
-                        regIdA = instr[7:4];
-                        regIdB = instr[3:0];
+                        readRegIdA  = instr[7:4];
+                        readRegIdB  = instr[3:0];
                     end
 
                     2'b11: begin 
                         
-                        regIdB = instr[3:0];
-                        immVal = {{ 21{ instr[4]}}, { instr[15:5] }};
+                        readRegIdB  = instr[3:0];
+                        immVal      = {{ 21{ instr[4]}}, { instr[15:5] }};
                     end
 
                 endcase
@@ -380,12 +275,41 @@ module DecodeLogic (
 
             default: begin
 
-                valid  = 1'b0;
+                validInstr  = 1'b0;
 
             end
 
         endcase
 
-    end
+    endtask
+
+
+    //--------------------------------------------------------------------------------------------------------
+    //
+    // ??? have a function that sets one of the reg values A, B or X. 
+
+    //--------------------------------------------------------------------------------------------------------
+    function setRegVal( 
+
+        input logic                     sel,
+
+        input logic[3:0]                regValId,
+        input logic[`WORD_LENGTH-1:0]   regVal,
+
+        input logic[3:0]                bypassId,
+        input logic[`WORD_LENGTH-1:0]   bypassVal,
+
+        input logic[`WORD_LENGTH-1:0]   immVal
+  
+        );
+
+        // ??? if sel == 1 use regs else use immVal
+
+
+
+    endfunction
 
 endmodule
+
+
+

@@ -12,5 +12,22 @@
    
     "cmake.generator": "Unix Makefiles",
     "cmake.buildDirectory": "${workspaceFolder}/build",
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "spellright.language": [
+        "en"
+    ],
+    "spellright.documentTypes": [
+        "markdown",
+        "latex",
+        "plaintext",
+        "verilog"
+    ],
+    "spellright.parserByClass": {
+        "code-text-binary": {
+            "parser": "plain"
+        },
+        "verilog": {
+            "parser": "code"
+        }
+    }
 }

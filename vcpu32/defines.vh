@@ -29,7 +29,6 @@
 `define DBL_WORD_LENGTH       64
 `define SEG_ID_WORD_LENGTH    16
 
-
 //------------------------------------------------------------------------------------------------------------
 // The reset vector. Upon reset, execution starts at this address in real mode.
 //

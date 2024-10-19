@@ -6,7 +6,7 @@
 //------------------------------------------------------------------------------------------------------------
 // This file contains the general register and a family of register files. They feature one or more read 
 // ports and one or two write ports. The read operation is an asynchronous operation, the write operation 
-// takes place synchronous to the clock signal. In addtion. the registers feature  a serial shift capability,
+// takes place synchronous to the clock signal. In addition. the registers feature  a serial shift capability,
 // to implement a read/write JTAG interface.
 //
 //------------------------------------------------------------------------------------------------------------
@@ -14,13 +14,13 @@
 
 
 //------------------------------------------------------------------------------------------------------------
-// A general register. The register can be instatiated with different field widths. In addition, the ScanReg
+// A general register. The register can be instantiated with different field widths. In addition, the ScanReg
 // Unit can be operated in two modes. The normal mode ( 1'b0 ) is a register with a parallel input and output,
 // set at the positive edge of the clock. In scan mode ( 1'b1 ), the register shifts one position to the right
 // reading one bit the from the serial input, passing the highest bit to the serial output. The idea is that 
 // a set of scan registers can be connected serially and shifted out as a big bit string for analysis and
 // diagnostics. Note that the serial output of the last register needs to feed into the serial input of the 
-// first register of the overial register chain. The number of clock cycles needs to match the sum of all 
+// first register of the overall register chain. The number of clock cycles needs to match the sum of all 
 // bits in the registers, such that the original content is restored. A scan register is used for example 
 // for the  pipeline register so we can see the setting of them during debug.
 //
