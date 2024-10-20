@@ -16,7 +16,7 @@
 //------------------------------------------------------------------------------------------------------------
 // VCPU-32Core is the CPU core for our pipelined CPU design. This module will instantiate the major building
 // blocks such as pipeline registers and pipeline stages. These objects are connected with wires and form the 
-// overall pipeline core skeleton. The follwing figure is a simplified picture of the major modules.
+// overall pipeline core skeleton. The following figure is a simplified picture of the major modules.
 //
 //
 //    +------------------+
@@ -51,12 +51,12 @@
 //    :                :                                                                           :
 //    :                :                                                                           :
 //    :                v                                                                           :
-//    +---------  ExecuteStage ( ComputeSubStage -> ... -> CommittSubStage )   --------------------+
+//    +---------  ExecuteStage ( ComputeSubStage -> ... -> CommitSubStage )   --------------------+
 // 
 // 
 // The pipeline register modules are simple collections of individual pipeline registers with no further 
 // logic. The stages are the workhorses. The output of a pipeline register simply connects to the input of
-// a stage and the output of a stage copnnects to the input of the pipeline register to follow. The values
+// a stage and the output of a stage connects to the input of the pipeline register to follow. The values
 // passed along have uppercase names used throughout the pipeline:
 //
 //    P -> instruction address segment.
@@ -74,12 +74,12 @@
 // register trigger on the "posEdge" of the master clock. The clock is derived from the input clock. It is 
 // half the speed of the input clock.
 //
-// Besides the pipeline stage units, the core has three more key building blocks. There are the instrucion 
+// Besides the pipeline stage units, the core has three more key building blocks. There are the instructions 
 // cache, data cache and the memory interface unit for both caches. A cache miss will result in stalling 
 // the pipeline. The I-Cache has priority over the D-cache requests.
 //
 // The VCPU-32Core module is written in structural mode. We declare the building block instances and connect
-// them with wires. The lower level buulding blocks, such as adders and multiplexers are mostly written in
+// them with wires. The lower level building blocks, such as adders and multiplexers are mostly written in
 // behavioral mode. Let the synthesis tool do its job.
 //
 //
@@ -88,18 +88,32 @@
 // ??? L1 caches, TLBs, RegFile and memory interface are part of the core...
 //
 // ??? a core will connect to the a shared L2 cache and also the system bus.
-// ??? initially we will habe one core and no L2 cache.
+// ??? initially we will have one core and no L2 cache.
 //
 // ??? add a serial interface for the register dumps...
 // 
 //------------------------------------------------------------------------------------------------------------
-
-
-
-module CpuCoreUnit ( 
-
-
+module CpuCore (   
+    
+    input logic clk,
+    input logic rst 
+                  
     );
+
+    logic[`WORD_LENGTH-1:0] wIaFdPstate0, wIaFdPstate1;
+
+    InstrAdrStage I_STAGE   (   .rst( rst), 
+                                .outPstate0( wIaFdPstate0 ), 
+                                .outPstate1( wIaFdPstate1 ) 
+
+                            );
+
+    FetchDecodeStage FD_STAGE ( .rst( rst ), 
+                                .clk( clk ),
+                                .inPstate0( wIaFdPstate0 ), 
+                                .inPstate1( wIaFdPstate1 )
+
+                              );
 
     // ??? stags and registers go here ... 
     // ??? should the pipeline registers be individual registers ? Naming ?
@@ -107,7 +121,7 @@ module CpuCoreUnit (
     // ??? interfaces with caches and tlb ... 
     // ??? separate I and D modules for cache and TLB.
 
-    // ??? IO Memspace access ?
+    // ??? IO Mem space access ?
     
 
 endmodule

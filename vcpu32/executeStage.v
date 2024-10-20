@@ -5,7 +5,7 @@
 //  Copyright (C) 2022 - 2024 Helmut Fieres, see License file.
 //------------------------------------------------------------------------------------------------------------
 // This file contains a family of register files. They feature one or more read ports and one or two write
-// ports. The read operation is an asynchronous operation, the write operation takles place synchronous to
+// ports. The read operation is an asynchronous operation, the write operation tackles place synchronous to
 // the clock signal.
 //
 //------------------------------------------------------------------------------------------------------------
@@ -27,7 +27,7 @@
 //
 //
 //
-// ??? one big module, would we need alu units or alike ? or just encode in the case statement ?
+// ??? one big module, would we need ALU units or alike ? or just encode in the case statement ?
 // ??? this comes quite close to the simulator....
 //------------------------------------------------------------------------------------------------------------
 module Executetage( 

@@ -23,17 +23,14 @@ module vcpu32(
 
     );
 
+    CpuCore CORE (  .clk( clk ), 
+                    .rst( rst )
+                        
+                 );
 
-    Register pState0 ( );
-    Register pState1 ( );
 
-    // ??? a boat load of registers, all the pipeline registers...
+    
 
-    // ??? should the general register file be decared here ?
-    // ??? should the segment register file be decared here ?
-    // ??? should the control registers be decared here ?
-
-    // ??? the consequence is a lot of wires to pass around... the pipelien logic is then combinatorial ?
 
     always @( negedge clk ) begin
 
