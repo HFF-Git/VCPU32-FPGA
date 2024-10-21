@@ -74,11 +74,6 @@ module FetchDecodeStage(
     // Trap Interface
     //-------------------------------------------------------------------------------------------------------- 
 
-
-    //--------------------------------------------------------------------------------------------------------      
-    // JTAG Interface
-    //-------------------------------------------------------------------------------------------------------- 
-    
   
     );
 
@@ -96,16 +91,30 @@ module FetchDecodeStage(
     logic[`WORD_LENGTH-1:0]     immVal;
     logic[1:0]                  valSelectA, valSelectB, valSelectX;
 
+     reg                        halfCycle;  
 
     //--------------------------------------------------------------------------------------------------------
-    // "Always" block for the instruction decode combinatorial logic.
-    //
+    // "Always" block for the half cycle logic. Each pipeline stage is structured into two parts. A pipeline
+    // cycle is therefore actually two cock cycles.
+    // 
+    //-------------------------------------------------------------------------------------------------------- 
+     always @( posedge clk or negedge rst ) begin
+
+        if (! rst ) halfCycle <= 0;
+        else        halfCycle <= ~ halfCycle;
+        
+    end
+
+    //--------------------------------------------------------------------------------------------------------
+    // "Always" block for the combinatorial logic.
+    // 
     //-------------------------------------------------------------------------------------------------------- 
     always @( instr ) begin
 
         decodeInstr( );
 
     end
+
    
     //--------------------------------------------------------------------------------------------------------
     // "Always" block for the pipeline stage output. We pass on the PSTATE, INSTR, A, B and X. The values are
@@ -125,32 +134,40 @@ module FetchDecodeStage(
 
         end else if ( wEnable ) begin 
 
-            outPstate0  <= inPstate0;
-            outPstate1  <= inPstate1;
-            outInstr    <= instr;
+            if ( halfCycle == 0 ) begin
 
-            outValA     <= getVal(  valSelectA,
-                                    outRegIdA,
-                                    inRegValA,
-                                    bypassRegId,
-                                    bypassRegVal,
-                                    immVal );
+                // work done in the first half...
 
-            outValB     <= getVal(  valSelectB,
-                                    outRegIdB,
-                                    inRegValB,
-                                    bypassRegId,
-                                    bypassRegVal,
-                                    immVal );
+            end else begin  
 
-            outValX     <= getVal(  valSelectX,
-                                    outRegIdX,
-                                    inRegValX,
-                                    bypassRegId,
-                                    bypassRegVal,
-                                    immVal );
+                outPstate0  <= inPstate0;
+                outPstate1  <= inPstate1;
+                outInstr    <= instr;
 
-        end 
+                outValA     <= getVal(  valSelectA,
+                                        outRegIdA,
+                                        inRegValA,
+                                        bypassRegId,
+                                        bypassRegVal,
+                                        immVal );
+
+                outValB     <= getVal(  valSelectB,
+                                        outRegIdB,
+                                        inRegValB,
+                                        bypassRegId,
+                                        bypassRegVal,
+                                        immVal );
+
+                outValX     <= getVal(  valSelectX,
+                                        outRegIdX,
+                                        inRegValX,
+                                        bypassRegId,
+                                        bypassRegVal,
+                                        immVal );
+
+            end 
+
+        end
 
     end
 

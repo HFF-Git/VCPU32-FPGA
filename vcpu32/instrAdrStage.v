@@ -22,18 +22,28 @@
 // fetch and decode stage. 
 //
 // ??? one day it may host a branch prediction function...
+// ??? should the adder be in this module ? 
+// ??? what to pass from FD, OF and EX ?
 //------------------------------------------------------------------------------------------------------------
 module InstrAdrStage ( 
 
     input logic rst,
 
+    input  logic[`WORD_LENGTH-1:0] inDfPstate0,
+    input  logic[`WORD_LENGTH-1:0] inDfPstate1,
 
-    
+    input  logic[`WORD_LENGTH-1:0] inOfPstate0,
+    input  logic[`WORD_LENGTH-1:0] inOfPstate1,
+
+    input  logic[`WORD_LENGTH-1:0] inExPstate0,
+    input  logic[`WORD_LENGTH-1:0] inExPstate1,
 
     output logic[`WORD_LENGTH-1:0] outPstate0,
     output logic[`WORD_LENGTH-1:0] outPstate1
 
     );
+
+    // ??? just a big selector ?
 
 
 endmodule

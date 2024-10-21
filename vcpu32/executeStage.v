@@ -32,18 +32,37 @@
 //------------------------------------------------------------------------------------------------------------
 module Executetage( 
    
-    input  logic                   inClk,
-    input  logic                   inRst, 
+    input  logic                   clk,
+    input  logic                   rst, 
     
+    //--------------------------------------------------------------------------------------------------------
+    // Pipeline stage input.
+    //-------------------------------------------------------------------------------------------------------- 
     input  logic[`WORD_LENGTH-1:0] inPstate0,
     input  logic[`WORD_LENGTH-1:0] inPstate1,
     input  logic[`WORD_LENGTH-1:0] inInstr,
-    
+    input  logic[`WORD_LENGTH-1:0] inValA,
+    input  logic[`WORD_LENGTH-1:0] inValB,
+    input  logic[`WORD_LENGTH-1:0] inValX,
+
+    //--------------------------------------------------------------------------------------------------------
+    // Pipeline stage output.
+    //-------------------------------------------------------------------------------------------------------- 
     output logic[`WORD_LENGTH-1:0] outPstate0,
-    output logic[`WORD_LENGTH-1:0] ourPstate1
-   
+    output logic[`WORD_LENGTH-1:0] ourPstate1,
+    output logic[`WORD_LENGTH-1:0] outI,
+    output logic[`WORD_LENGTH-1:0] outA,
+    output logic[`WORD_LENGTH-1:0] outB,
+    output logic[`WORD_LENGTH-1:0] outX
+
+    //--------------------------------------------------------------------------------------------------------      
+    // Trap Interface
+    //-------------------------------------------------------------------------------------------------------- 
+
+  
   
     );
+
 
     reg[`WORD_LENGTH-1:0]   valA, valB, valX;
 
@@ -60,7 +79,27 @@ module Executetage(
     // add a lot of assigns for the various instruction bit fields ?
 
 
-    always @( posedge inClk or negedge inRst ) begin 
+    reg                        halfCycle;  
+
+
+    //--------------------------------------------------------------------------------------------------------
+    // "Always" block for the half cycle logic. Each pipeline stage is structured into two parts. A pipeline
+    // cycle is therefore actually two cock cycles.
+    // 
+    //-------------------------------------------------------------------------------------------------------- 
+     always @( posedge clk or negedge rst ) begin
+
+        if (! rst ) halfCycle <= 0;
+        else        halfCycle <= ~ halfCycle;
+        
+    end
+
+
+    //-------------------------------------------------------------------------------------------------------- 
+    //
+    // 
+    //-------------------------------------------------------------------------------------------------------- 
+    always @( posedge clk or negedge rst ) begin 
       
         case ( opCode )
            
@@ -211,20 +250,3 @@ module Executetage(
 
 
 endmodule
-
-
-module computeSubStage (
-
-
-    );
-
-endmodule
-
-module committSubStage (
-
-
-    );
-
-endmodule
-
-

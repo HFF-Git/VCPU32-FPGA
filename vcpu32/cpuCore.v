@@ -25,7 +25,7 @@
 //    :  :  :        : : :
 //    :  :  :        v v v
 //    :  :  :
-//    :  :  :     nextInstrAdr 
+//    :  :  :     InstrAdrStage 
 //    :  :  :          :
 //    :  :             :
 //    :  :  :          v
@@ -33,31 +33,31 @@
 //    :  :  :          :
 //    :  :  :          :
 //    :  :  :          v
-//    :  :  +---  FetchDecodeStage ( FetchSubStage -> ... -> DecodeSubStage )
+//    :  :  +---  FetchDecodeStage
 //    :  :             :
-//    :  :             :              +--+--+------------------------------------------------------+    
-//    :  :             :              :  :  :                                                      :
-//    :  :             v              v  v  v                                                      :
-//    :  :        PregFdMa [ P, O, I, A, B, X ]                                                    :
-//    :  :             :                                                                           :
-//    :  :             :                                                                           :
-//    :  :             v                                                                           :
-//    :  +------  OperandFetchStage ( ComputeAddressSubStage -> ... -> DataAccessSubStage )        :
-//    :                :                                                                           :
-//    :                :              +--+---------------------------------------------------------+
-//    :                :              :  :                                                         :
-//    :                v              v  v                                                         :
-//    :           PregMaEx [ P, O, I, A, B, X, S ]                                                 :
-//    :                :                                                                           :
-//    :                :                                                                           :
-//    :                v                                                                           :
-//    +---------  ExecuteStage ( ComputeSubStage -> ... -> CommitSubStage )   --------------------+
+//    :  :             :              +--+--+---------------------------------------------------+    
+//    :  :             :              :  :  :                                                   :
+//    :  :             v              v  v  v                                                   :
+//    :  :        PregFdMa [ P, O, I, A, B, X ]                                                 :
+//    :  :             :                                                                        :
+//    :  :             :                                                                        :
+//    :  :             v                                                                        :
+//    :  +------  OperandFetchStage                                                             :
+//    :                :                                                                        :
+//    :                :              +--+------------------------------------------------------+
+//    :                :              :  :  :                                                   :
+//    :                v              v  v  v                                                   :
+//    :           PregMaEx [ P, O, I, A, B, X, S ]                                              :
+//    :                :                                                                        :
+//    :                :                                                                        :
+//    :                v                                                                        :
+//    +---------  ExecuteStage        ----------------------------------------------------------+
 // 
 // 
-// The pipeline register modules are simple collections of individual pipeline registers with no further 
-// logic. The stages are the workhorses. The output of a pipeline register simply connects to the input of
-// a stage and the output of a stage connects to the input of the pipeline register to follow. The values
-// passed along have uppercase names used throughout the pipeline:
+// The pipeline stages consist of combinatorial logic and pipeline registers. The only exception is the 
+// the execute stage which does not have a pipeline register. Its result are directly fed to the 
+// instruction address stage or the CPU registers. The values passed along have uppercase names used
+// throughout the pipeline:
 //
 //    P -> instruction address segment.
 //    O -> instruction address offset.
@@ -69,19 +69,15 @@
 //    S -> value S passed to next stage.
 //    R - Ex stage computation result.
 //
-// The stages are each built from two sub stages with an internal register set to pass data from the first
-// substage to the second substage. These register trigger on the "negEdge" of the master clock. The pipeline
-// register trigger on the "posEdge" of the master clock. The clock is derived from the input clock. It is 
-// half the speed of the input clock.
+// The stages are each built from two sub stages with internal registers set to pass data from the first
+// half substage to the second substage. These register trigger on the "posEdge" of the first half. The 
+// pipeline register trigger on the "posEdge" of the second half.
+
+//
 //
 // Besides the pipeline stage units, the core has three more key building blocks. There are the instructions 
 // cache, data cache and the memory interface unit for both caches. A cache miss will result in stalling 
 // the pipeline. The I-Cache has priority over the D-cache requests.
-//
-// The VCPU-32Core module is written in structural mode. We declare the building block instances and connect
-// them with wires. The lower level building blocks, such as adders and multiplexers are mostly written in
-// behavioral mode. Let the synthesis tool do its job.
-//
 //
 // ??? quite some ways to go ... need control lines... 
 // ??? basic question: do we decode all control lines in the FD stage or distribute it ?
@@ -90,7 +86,6 @@
 // ??? a core will connect to the a shared L2 cache and also the system bus.
 // ??? initially we will have one core and no L2 cache.
 //
-// ??? add a serial interface for the register dumps...
 // 
 //------------------------------------------------------------------------------------------------------------
 module CpuCore (   
@@ -101,6 +96,19 @@ module CpuCore (
     );
 
     logic[`WORD_LENGTH-1:0] wIaFdPstate0, wIaFdPstate1;
+
+
+    RegisterFile_3R_2W GREG (   .rst( rst ),
+                                .clk( clk )
+
+
+                            );
+
+    RegisterFile_1R_1W SREG (   .rst( rst ),
+                                .clk( clk )
+
+
+                            );
 
     InstrAdrStage I_STAGE   (   .rst( rst), 
                                 .outPstate0( wIaFdPstate0 ), 
@@ -115,9 +123,7 @@ module CpuCore (
 
                               );
 
-    // ??? stags and registers go here ... 
-    // ??? should the pipeline registers be individual registers ? Naming ?
-
+    
     // ??? interfaces with caches and tlb ... 
     // ??? separate I and D modules for cache and TLB.
 

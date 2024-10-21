@@ -31,50 +31,61 @@
 //------------------------------------------------------------------------------------------------------------
 module OperandFetchStage ( 
    
-    input  logic                   inClk,
-    input  logic                   inRst, 
+    input  logic                   clk,
+    input  logic                   rst, 
     
+    //--------------------------------------------------------------------------------------------------------
+    // Pipeline stage input.
+    //-------------------------------------------------------------------------------------------------------- 
     input  logic[`WORD_LENGTH-1:0] inPstate0,
     input  logic[`WORD_LENGTH-1:0] inPstate1,
     input  logic[`WORD_LENGTH-1:0] inInstr,
-   
+    input  logic[`WORD_LENGTH-1:0] inValA,
+    input  logic[`WORD_LENGTH-1:0] inValB,
+    input  logic[`WORD_LENGTH-1:0] inValX,
+
+    //--------------------------------------------------------------------------------------------------------
+    // Pipeline stage output.
+    //-------------------------------------------------------------------------------------------------------- 
     output logic[`WORD_LENGTH-1:0] outPstate0,
     output logic[`WORD_LENGTH-1:0] ourPstate1,
     output logic[`WORD_LENGTH-1:0] outI,
     output logic[`WORD_LENGTH-1:0] outA,
     output logic[`WORD_LENGTH-1:0] outB,
     output logic[`WORD_LENGTH-1:0] outX
+
+     //--------------------------------------------------------------------------------------------------------  
+    // Interface to the D-Cache
+    //-------------------------------------------------------------------------------------------------------- 
+
+
+    //--------------------------------------------------------------------------------------------------------  
+    // Interface to the D-TLB
+    //-------------------------------------------------------------------------------------------------------- 
+
+
+    //--------------------------------------------------------------------------------------------------------      
+    // Trap Interface
+    //-------------------------------------------------------------------------------------------------------- 
+
   
     );
 
-    reg[`WORD_LENGTH-1:0]   valA, valB, valX;
 
-    logic [5:0] opCode;
-    logic [3:0] regIdR;
-    logic [3:0] regIdA;
-    logic [3:0] regIdB;
+    reg                        halfCycle;  
 
-    assign opCode     = inInstr[31:26];
-    assign regIdR     = inInstr[25:22];
-    assign regIdA     = inInstr[8:4];
-    assign regIdB     = inInstr[3:0];
+    //--------------------------------------------------------------------------------------------------------
+    // "Always" block for the half cycle logic. Each pipeline stage is structured into two parts. A pipeline
+    // cycle is therefore actually two cock cycles.
+    // 
+    //-------------------------------------------------------------------------------------------------------- 
+     always @( posedge clk or negedge rst ) begin
 
-    assign outA       = valA;
-    assign outB       = valB;
-    assign outX       = valX;
-    assign outI       = inInstr;
+        if (! rst ) halfCycle <= 0;
+        else        halfCycle <= ~ halfCycle;
+        
+    end
 
-
-endmodule
-
-//------------------------------------------------------------------------------------------------------------
-//
-//
-//------------------------------------------------------------------------------------------------------------
-module AdrSelect ( 
-
-
-);
 
 
 endmodule
