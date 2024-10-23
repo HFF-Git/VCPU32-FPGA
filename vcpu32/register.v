@@ -33,15 +33,23 @@ module Register #(
 
     );
 
+    localparam ZERO = { WIDTH{1'b0} };
+
+    initial begin
+
+        q = ZERO;
+
+    end
+
     always @( posedge clk or negedge rst ) begin
 
         if ( ! rst ) begin
             
-            q   <= 0;
+            q <= 0;
 
         end else begin            
             
-            if ( wEnable ) q   <= d;
+            if ( wEnable ) q <= d;
         
         end 
     
@@ -73,13 +81,18 @@ module RegisterFile_1R_1W #(
 
     );
 
+    initial begin
+
+        readData1 = ZERO;
+
+    end
+
     reg [WIDTH-1:0]                 regFile [$clog2(SIZE)-1:0];
     reg [$clog2(SIZE)-1:0]          shiftAdr;
     reg [SIZE-1:0]                  shiftReg;
     reg [$clog2(WIDTH)-1:0]         shiftCnt;
 
     integer                         i;
-   
     localparam                      ZERO = {WIDTH{1'b0}};
 
     always @(posedge clk or negedge rst) begin
