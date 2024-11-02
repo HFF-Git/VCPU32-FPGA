@@ -16,7 +16,7 @@
 //------------------------------------------------------------------------------------------------------------
 module Mux_2_1 #( 
 
-   parameter WIDTH = `WORD_LENGTH
+   parameter WIDTH = WORD_LENGTH
 
    ) (
 
@@ -52,7 +52,7 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 module Mux_4_1 #( 
 
-   parameter WIDTH = `WORD_LENGTH
+   parameter WIDTH = WORD_LENGTH
 
    ) (
 
@@ -94,7 +94,7 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 module Mux_8_1 #( 
 
-   parameter WIDTH = `WORD_LENGTH
+   parameter WIDTH = WORD_LENGTH
 
    ) (
 
@@ -174,7 +174,7 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 module AndOp #(
 
-      parameter WIDTH = `WORD_LENGTH
+      parameter WIDTH = WORD_LENGTH
    
    ) ( 
 
@@ -195,7 +195,7 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 module OrOp #(
 
-      parameter WIDTH = `WORD_LENGTH
+      parameter WIDTH = WORD_LENGTH
    
    ) ( 
 
@@ -216,7 +216,7 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 module XorOp #(
 
-      parameter WIDTH = `WORD_LENGTH
+      parameter WIDTH = WORD_LENGTH
    
    ) ( 
 

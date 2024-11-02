@@ -27,32 +27,31 @@
 //
 //
 //
-// ??? all in one module ?
 //------------------------------------------------------------------------------------------------------------
-module OperandFetchStage ( 
+module MemoryAccessStage ( 
    
-    input  logic                   clk,
-    input  logic                   rst, 
+    input  logic                    clk,
+    input  logic                    rst, 
     
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage input.
     //-------------------------------------------------------------------------------------------------------- 
-    input  logic[`WORD_LENGTH-1:0] inPstate0,
-    input  logic[`WORD_LENGTH-1:0] inPstate1,
-    input  logic[`WORD_LENGTH-1:0] inInstr,
-    input  logic[`WORD_LENGTH-1:0] inValA,
-    input  logic[`WORD_LENGTH-1:0] inValB,
-    input  logic[`WORD_LENGTH-1:0] inValX,
+    input  logic[WORD_LENGTH-1:0]   inPstate0,
+    input  logic[WORD_LENGTH-1:0]   inPstate1,
+    input  logic[WORD_LENGTH-1:0]   inInstr,
+    input  logic[WORD_LENGTH-1:0]   inValA,
+    input  logic[WORD_LENGTH-1:0]   inValB,
+    input  logic[WORD_LENGTH-1:0]   inValX,
 
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage output.
     //-------------------------------------------------------------------------------------------------------- 
-    output logic[`WORD_LENGTH-1:0] outPstate0,
-    output logic[`WORD_LENGTH-1:0] ourPstate1,
-    output logic[`WORD_LENGTH-1:0] outI,
-    output logic[`WORD_LENGTH-1:0] outA,
-    output logic[`WORD_LENGTH-1:0] outB,
-    output logic[`WORD_LENGTH-1:0] outX
+    output logic[WORD_LENGTH-1:0]   outPstate0,
+    output logic[WORD_LENGTH-1:0]   ourPstate1,
+    output logic[WORD_LENGTH-1:0]   outI,
+    output logic[WORD_LENGTH-1:0]   outA,
+    output logic[WORD_LENGTH-1:0]   outB,
+    output logic[WORD_LENGTH-1:0]   outX
 
      //--------------------------------------------------------------------------------------------------------  
     // Interface to the D-Cache
@@ -72,7 +71,7 @@ module OperandFetchStage (
     );
 
 
-    reg                        halfCycle;  
+    reg  halfCycle;  
 
     //--------------------------------------------------------------------------------------------------------
     // "Always" block for the half cycle logic. Each pipeline stage is structured into two parts. A pipeline

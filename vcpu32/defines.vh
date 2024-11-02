@@ -13,6 +13,8 @@
 `ifndef DEFINES_VH
 `define DEFINES_VH
 
+parameter HUGO = 100; // ??? this works. We should use parameter instead of defines...
+
 //------------------------------------------------------------------------------------------------------------
 // Make sure that we do not have nets without a type in order to avoid surprises during synthesis.
 //
@@ -23,11 +25,20 @@
 // Global definitions.
 //
 //------------------------------------------------------------------------------------------------------------
+/*
 `define BYTE_LENGTH           8
 `define HALF_WORD_LENGTH      16
 `define WORD_LENGTH           32
 `define DBL_WORD_LENGTH       64
 `define SEG_ID_WORD_LENGTH    16
+*/
+
+parameter BYTE_LENGTH           = 8;
+parameter HALF_WORD_LENGTH      = 16;
+parameter WORD_LENGTH           = 32;
+parameter DBL_WORD_LENGTH       = 64;
+parameter SEG_ID_WORD_LENGTH    = 16;
+
 
 //------------------------------------------------------------------------------------------------------------
 // The reset vector. Upon reset, execution starts at this address in real mode.

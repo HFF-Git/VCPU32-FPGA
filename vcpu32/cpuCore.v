@@ -95,8 +95,9 @@ module CpuCore (
                   
     );
 
-    logic[`WORD_LENGTH-1:0] wIaFdPstate0, wIaFdPstate1;
-
+    logic[WORD_LENGTH-1:0] wIaFdPstate0, wIaFdPstate1;
+    logic[WORD_LENGTH-1:0] wFdMaPstate0, wFdMaPstate1;
+    logic[WORD_LENGTH-1:0] wMaExPstate0, wMaExPstate1;
 
     RegisterFile_3R_2W GREG (   .rst( rst ),
                                 .clk( clk )
@@ -122,6 +123,20 @@ module CpuCore (
                                 .inPstate1( wIaFdPstate1 )
 
                               );
+
+    MemoryAccessStage MA_STAGE ( .rst( rst ), 
+                                .clk( clk ),
+                                .inPstate0( wFdMaPstate0 ), 
+                                .inPstate1( wFdMaPstate1 )
+
+                              );
+
+    ExecuteStage EX_STAGE ( .rst( rst ), 
+                            .clk( clk ),
+                            .inPstate0( wMaExPstate0 ), 
+                            .inPstate1( wMaExPstate1 )
+
+                            );
 
     
     // ??? interfaces with caches and tlb ... 

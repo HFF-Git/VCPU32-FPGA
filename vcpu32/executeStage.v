@@ -30,7 +30,7 @@
 // ??? one big module, would we need ALU units or alike ? or just encode in the case statement ?
 // ??? this comes quite close to the simulator....
 //------------------------------------------------------------------------------------------------------------
-module Executetage( 
+module ExecuteStage( 
    
     input  logic                   clk,
     input  logic                   rst, 
@@ -38,22 +38,22 @@ module Executetage(
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage input.
     //-------------------------------------------------------------------------------------------------------- 
-    input  logic[`WORD_LENGTH-1:0] inPstate0,
-    input  logic[`WORD_LENGTH-1:0] inPstate1,
-    input  logic[`WORD_LENGTH-1:0] inInstr,
-    input  logic[`WORD_LENGTH-1:0] inValA,
-    input  logic[`WORD_LENGTH-1:0] inValB,
-    input  logic[`WORD_LENGTH-1:0] inValX,
+    input  logic[WORD_LENGTH-1:0] inPstate0,
+    input  logic[WORD_LENGTH-1:0] inPstate1,
+    input  logic[WORD_LENGTH-1:0] inInstr,
+    input  logic[WORD_LENGTH-1:0] inValA,
+    input  logic[WORD_LENGTH-1:0] inValB,
+    input  logic[WORD_LENGTH-1:0] inValX,
 
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage output.
     //-------------------------------------------------------------------------------------------------------- 
-    output logic[`WORD_LENGTH-1:0] outPstate0,
-    output logic[`WORD_LENGTH-1:0] ourPstate1,
-    output logic[`WORD_LENGTH-1:0] outI,
-    output logic[`WORD_LENGTH-1:0] outA,
-    output logic[`WORD_LENGTH-1:0] outB,
-    output logic[`WORD_LENGTH-1:0] outX
+    output logic[WORD_LENGTH-1:0] outPstate0,
+    output logic[WORD_LENGTH-1:0] ourPstate1,
+    output logic[WORD_LENGTH-1:0] outI,
+    output logic[WORD_LENGTH-1:0] outA,
+    output logic[WORD_LENGTH-1:0] outB,
+    output logic[WORD_LENGTH-1:0] outX
 
     //--------------------------------------------------------------------------------------------------------      
     // Trap Interface
@@ -64,7 +64,7 @@ module Executetage(
     );
 
 
-    reg[`WORD_LENGTH-1:0]   valA, valB, valX;
+    reg[WORD_LENGTH-1:0]    valA, valB, valX;
 
     logic [5:0] opCode;
     logic [3:0] regIdR;

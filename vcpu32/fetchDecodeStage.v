@@ -31,34 +31,34 @@ module FetchDecodeStage(
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage input.
     //-------------------------------------------------------------------------------------------------------- 
-    input   logic[`WORD_LENGTH-1:0]     inPstate0,
-    input   logic[`WORD_LENGTH-1:0]     inPstate1,
+    input   logic[WORD_LENGTH-1:0]      inPstate0,
+    input   logic[WORD_LENGTH-1:0]      inPstate1,
 
     input   logic[3:0]                  bypassRegId,
-    input   logic[`WORD_LENGTH-1:0]     bypassRegVal,
+    input   logic[WORD_LENGTH-1:0]      bypassRegVal,
 
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage output.
     //-------------------------------------------------------------------------------------------------------- 
-    output  logic[`WORD_LENGTH-1:0]     outPstate0,
-    output  logic[`WORD_LENGTH-1:0]     outPstate1,
-    output  logic[`WORD_LENGTH-1:0]     outInstr,
+    output  logic[WORD_LENGTH-1:0]      outPstate0,
+    output  logic[WORD_LENGTH-1:0]      outPstate1,
+    output  logic[WORD_LENGTH-1:0]      outInstr,
 
-    output  reg[`WORD_LENGTH-1:0]       outValA,
-    output  reg[`WORD_LENGTH-1:0]       outValB,
-    output  reg[`WORD_LENGTH-1:0]       outValX,
+    output  reg[WORD_LENGTH-1:0]        outValA,
+    output  reg[WORD_LENGTH-1:0]        outValB,
+    output  reg[WORD_LENGTH-1:0]        outValX,
 
     //--------------------------------------------------------------------------------------------------------  
     // Interface to the GREG register file.
     //-------------------------------------------------------------------------------------------------------- 
     output  reg[3:0]                    outRegIdA,
-    input   logic[`WORD_LENGTH-1:0]     inRegValA,
+    input   logic[WORD_LENGTH-1:0]      inRegValA,
 
     output  reg[3:0]                    outRegIdB,
-    input   logic[`WORD_LENGTH-1:0]     inRegValB,
+    input   logic[WORD_LENGTH-1:0]      inRegValB,
 
     output  reg[3:0]                    outRegIdX, 
-    input   logic[`WORD_LENGTH-1:0]     inRegValX
+    input   logic[WORD_LENGTH-1:0]      inRegValX
 
     //--------------------------------------------------------------------------------------------------------  
     // Interface to the I-Cache
@@ -96,14 +96,14 @@ module FetchDecodeStage(
     // Local definitions.
     //
     //--------------------------------------------------------------------------------------------------------
-    localparam                  ZERO            = {`WORD_LENGTH{1'b0}};
+    localparam                  ZERO            = {WORD_LENGTH{1'b0}};
     localparam                  SEL_REG_VAL     = 1'b0;
     localparam                  SEL_IMM_VAL     = 1'b1;
     
     logic                       wEnable;
     logic                       validInstr;
-    logic[`WORD_LENGTH-1:0]     instr; 
-    logic[`WORD_LENGTH-1:0]     immVal;
+    logic[WORD_LENGTH-1:0]      instr; 
+    logic[WORD_LENGTH-1:0]      immVal;
     logic[1:0]                  valSelectA, valSelectB, valSelectX;
 
      reg                        halfCycle;  
@@ -478,14 +478,14 @@ module FetchDecodeStage(
     // bypass situation.
     //
     //--------------------------------------------------------------------------------------------------------
-    function [`WORD_LENGTH-1:0] getVal ( 
+    function [WORD_LENGTH-1:0] getVal ( 
 
         input logic                     sel,
         input logic[3:0]                regId,
-        input logic[`WORD_LENGTH-1:0]   regVal,
+        input logic[WORD_LENGTH-1:0]    regVal,
         input logic[3:0]                bypassRegId,
-        input logic[`WORD_LENGTH-1:0]   bypassRegVal,
-        input logic[`WORD_LENGTH-1:0]   immVal
+        input logic[WORD_LENGTH-1:0]    bypassRegVal,
+        input logic[WORD_LENGTH-1:0]    immVal
   
         );
 

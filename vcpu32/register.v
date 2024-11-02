@@ -20,16 +20,16 @@
 //------------------------------------------------------------------------------------------------------------
 module Register #( 
 
-    parameter WIDTH = `WORD_LENGTH
+    parameter WIDTH = WORD_LENGTH
 
     ) (
 
     input   logic                       clk,
     input   logic                       rst,
     inout   logic                       wEnable,
-    input   logic[`WORD_LENGTH-1:0]     d,
+    input   logic[WORD_LENGTH-1:0]      d,
 
-    output  logic[`WORD_LENGTH-1:0]     q
+    output  logic[WORD_LENGTH-1:0]      q
 
     );
 
@@ -65,7 +65,7 @@ endmodule
 module RegisterFile_1R_1W #( 
 
     parameter SIZE  = 8,
-    parameter WIDTH = `WORD_LENGTH
+    parameter WIDTH = WORD_LENGTH
 
     ) (
 
@@ -127,7 +127,7 @@ endmodule
 module RegisterFile_2R_1W #( 
 
     parameter SIZE  = 16,
-    parameter WIDTH = `WORD_LENGTH
+    parameter WIDTH = WORD_LENGTH
 
     ) (
 
@@ -193,7 +193,7 @@ endmodule
 module RegisterFile_3R_2W #( 
 
     parameter SIZE  = 16,
-    parameter WIDTH = `WORD_LENGTH
+    parameter WIDTH = WORD_LENGTH
 
     ) (
 

@@ -6,7 +6,7 @@
 //------------------------------------------------------------------------------------------------------------
 // This file contains the general register and a family of register files. They feature one or more read 
 // ports and one or two write ports. The read operation is an asynchronous operation, the write operation 
-// takes place synchronous to the clock signal. In addtion. the registers feature  a serial shift capability,
+// takes place synchronous to the clock signal. In addition. the registers feature  a serial shift capability,
 // to implement a read/write JTAG interface.
 //
 //------------------------------------------------------------------------------------------------------------
@@ -26,13 +26,13 @@ module ItlbUnit #(
    
    ) ( 
 
-   input    wire                       clk, 
-   input    wire                       rst,
-   input    wire [0:`WORD_LENGTH-1]    inSeg,
-   input    wire [0:`WORD_LENGTH-1]    inOfs,
+   input    wire                        clk, 
+   input    wire                        rst,
+   input    wire [WORD_LENGTH-1:0]      inSeg,
+   input    wire [WORD_LENGTH-1:0]      inOfs,
 
-   output   wire                       found,
-   output   wire [0:`WORD_LENGTH-1]    outAdr
+   output   wire                        found,
+   output   wire [WORD_LENGTH-1:0]      outAdr
 
    );
 

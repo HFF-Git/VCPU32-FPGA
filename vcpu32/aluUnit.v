@@ -31,7 +31,7 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 //
 //
-// ??? combines double shift, extr and dep in one module...
+// ??? combines double shift, EXTR and DEP in one module...
 //------------------------------------------------------------------------------------------------------------
 module ShiftMergeUnit( 
 
@@ -59,12 +59,12 @@ endmodule
 //
 //    - Bit 0:    Represents the carry in value.
 //    - Bit 1:    the B input is inverted before operation              ( tmpB <- ~ B )
-//    - Bit 2:    the ALU putput is inverted                            ( R    -> ~ tmpR )
+//    - Bit 2:    the ALU output is inverted                            ( R    -> ~ tmpR )
 //    - Bit 3..4: the A input is shifted left by zero to three bits     ( tmpA <- A << amount )
 //
-//    - Bit 5..7: The ALU operation code for procesing the A and B value as follows:
+//    - Bit 5..7: The ALU operation code for processing the A and B value as follows:
 //
-//          0 -   the ALU produces a zero result, subject to ouput inversion. ( R    -> ~ tmpR )
+//          0 -   the ALU produces a zero result, subject to output inversion. ( R    -> ~ tmpR )
 //          1 -   tmpA is just passed through.                                ( tmpR <- tmpA )
 //          2 -   tmpB is just passed through.                                ( tmpR <- tmpB )   
 //          3 -   tmpA and tmpB are the input to the adder module.            ( tmpR <- tmpa + tmpB + cIn )   
@@ -74,7 +74,7 @@ endmodule
 //          7 -   tmpA and tmpB are input to the XOR module.                  ( tmpR <- tmpa ^ tmpB )
 //
 // Note that all these options can be combined. For example, a carry in of 1, the negation of B and a ALU 
-// add operation will resuslt in a subtraction operation. The ALU does logical addition. The interpretation
+// add operation will result in a subtraction operation. The ALU does logical addition. The interpretation
 // of overflow for signed and unsigned arithmetic is handed by the enclosing module.
 // 
 // ??? the shift operations for "a" could also result in an overflow. This should perhaps also be handled
@@ -82,7 +82,7 @@ endmodule
 // case, the err line my not be necessary.
 //
 //
-// The execte substage is the place where we deal with overflows.
+// The execute substage is the place where we deal with overflows.
 //
 // addition signed
 // (( ~ a[0] ) & ( ~ b[0] ) & ( s[0] )) | (( a[0] ) & ( b[0] ) & ( ~ s[0] )) 
@@ -94,11 +94,11 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 module AluUnit_old (
 
-   input    wire[0:`WORD_LENGTH-1]  a,
-   input    wire[0:`WORD_LENGTH-1]  b,
+   input    wire[0:WORD_LENGTH-1]  a,
+   input    wire[0:WORD_LENGTH-1]  b,
    input    wire[0:7]               ac,
 
-   output   wire[0:`WORD_LENGTH-1]  r,
+   output   wire[0:WORD_LENGTH-1]  r,
    output   wire                    c,
    output   wire                    n,
    output   wire                    z,
@@ -106,10 +106,10 @@ module AluUnit_old (
    
    );
 
-   wire[0:`WORD_LENGTH-1] tmpA, tmpB, tAnd, tOr, tXor, tAdd, tmpR;
+   wire[0:WORD_LENGTH-1] tmpA, tmpB, tAnd, tOr, tXor, tAdd, tmpR;
    wire tCout;
 
-   AdderUnit #( .WIDTH( `WORD_LENGTH )) U1 ( .a( tmpA ), .b( tmpB ), .inC( ac[0] ), .s( tAdd ), .outC( tCout )); 
+   AdderUnit #( .WIDTH( WORD_LENGTH )) U1 ( .a( tmpA ), .b( tmpB ), .inC( ac[0] ), .s( tAdd ), .outC( tCout )); 
 
    Mux_8_1  U2 (  .a0( 32'd0 ),
                   .a1( tmpA ),
@@ -151,7 +151,7 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 module AdderUnit #( 
 
-   parameter WIDTH = `WORD_LENGTH
+   parameter WIDTH = WORD_LENGTH
 
    ) ( 
 
@@ -176,7 +176,7 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 module IncrementerUnit #( 
 
-   parameter WIDTH = 32,
+   parameter WIDTH = WORD_LENGTH,
    parameter AMT   = 1
 
    ) (
@@ -201,7 +201,7 @@ endmodule
 //------------------------------------------------------------------------------------------------------------
 module logicUnit  #( 
 
-    parameter WIDTH = `WORD_LENGTH
+    parameter WIDTH = WORD_LENGTH
 
     ) ( 
 
