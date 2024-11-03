@@ -38,12 +38,12 @@ module ExecuteStage(
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage input.
     //-------------------------------------------------------------------------------------------------------- 
-    input  logic[WORD_LENGTH-1:0] inPstate0,
-    input  logic[WORD_LENGTH-1:0] inPstate1,
-    input  logic[WORD_LENGTH-1:0] inInstr,
-    input  logic[WORD_LENGTH-1:0] inValA,
-    input  logic[WORD_LENGTH-1:0] inValB,
-    input  logic[WORD_LENGTH-1:0] inValX,
+    input  logic[WORD_LENGTH-1:0] maExPState0,
+    input  logic[WORD_LENGTH-1:0] maExPState1,
+    input  logic[WORD_LENGTH-1:0] maExInstr,
+    input  logic[WORD_LENGTH-1:0] maExValA,
+    input  logic[WORD_LENGTH-1:0] maExValB,
+    input  logic[WORD_LENGTH-1:0] maExValX,
 
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage output.
@@ -71,10 +71,10 @@ module ExecuteStage(
     logic [3:0] regIdA;
     logic [3:0] regIdB;
 
-    assign opCode     = inInstr[31:26];
-    assign regIdR     = inInstr[25:22];
-    assign regIdA     = inInstr[8:4];
-    assign regIdB     = inInstr[3:0];
+    assign opCode     = maExInstr[31:26];
+    assign regIdR     = maExInstr[25:22];
+    assign regIdA     = maExInstr[8:4];
+    assign regIdB     = maExInstr[3:0];
 
     // add a lot of assigns for the various instruction bit fields ?
 

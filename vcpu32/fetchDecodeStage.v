@@ -31,8 +31,8 @@ module FetchDecodeStage(
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage input.
     //-------------------------------------------------------------------------------------------------------- 
-    input   logic[WORD_LENGTH-1:0]      inPstate0,
-    input   logic[WORD_LENGTH-1:0]      inPstate1,
+    input   logic[WORD_LENGTH-1:0]      iaFdPstate0,
+    input   logic[WORD_LENGTH-1:0]      iaFdPstate1,
 
     input   logic[3:0]                  bypassRegId,
     input   logic[WORD_LENGTH-1:0]      bypassRegVal,
@@ -40,13 +40,13 @@ module FetchDecodeStage(
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage output.
     //-------------------------------------------------------------------------------------------------------- 
-    output  logic[WORD_LENGTH-1:0]      outPstate0,
-    output  logic[WORD_LENGTH-1:0]      outPstate1,
-    output  logic[WORD_LENGTH-1:0]      outInstr,
+    output  logic[WORD_LENGTH-1:0]      fdMaPstate0,
+    output  logic[WORD_LENGTH-1:0]      fdMaPstate1,
+    output  logic[WORD_LENGTH-1:0]      fdMaInstr,
 
-    output  reg[WORD_LENGTH-1:0]        outValA,
-    output  reg[WORD_LENGTH-1:0]        outValB,
-    output  reg[WORD_LENGTH-1:0]        outValX,
+    output  reg[WORD_LENGTH-1:0]        fdMaValA,
+    output  reg[WORD_LENGTH-1:0]        fdMaValB,
+    output  reg[WORD_LENGTH-1:0]        fdMaValX,
 
     //--------------------------------------------------------------------------------------------------------  
     // Interface to the GREG register file.
@@ -83,12 +83,12 @@ module FetchDecodeStage(
     //--------------------------------------------------------------------------------------------------------
     initial begin
 
-        outPstate0  = ZERO;
-        outPstate1  = ZERO;
-        outInstr    = ZERO;
-        outValA     = ZERO;
-        outValB     = ZERO;
-        outValX     = ZERO;
+        fdMaPstate0  = ZERO;
+        fdMaPstate1  = ZERO;
+        fdMaInstr    = ZERO;
+        fdMaValA     = ZERO;
+        fdMaValB     = ZERO;
+        fdMaValX     = ZERO;
         
     end
 
@@ -140,12 +140,12 @@ module FetchDecodeStage(
 
         if ( ! rst ) begin
             
-            outPstate0  <= ZERO;
-            outPstate1  <= ZERO;
-            outInstr    <= ZERO;
-            outValA     <= ZERO;
-            outValB     <= ZERO;
-            outValX     <= ZERO;
+            fdMaPstate0  <= ZERO;
+            fdMaPstate1  <= ZERO;
+            fdMaInstr    <= ZERO;
+            fdMaValA     <= ZERO;
+            fdMaValB     <= ZERO;
+            fdMaValX     <= ZERO;
 
         end else if ( wEnable ) begin 
 
@@ -155,25 +155,25 @@ module FetchDecodeStage(
 
             end else begin  
 
-                outPstate0  <= inPstate0;
-                outPstate1  <= inPstate1;
-                outInstr    <= instr;
+                fdMaPstate0  <= iaFdPstate0;
+                fdMaPstate1  <= iaFdPstate1;
+                fdMaInstr    <= instr;
 
-                outValA     <= getVal(  valSelectA,
+                fdMaValA     <= getVal(  valSelectA,
                                         outRegIdA,
                                         inRegValA,
                                         bypassRegId,
                                         bypassRegVal,
                                         immVal );
 
-                outValB     <= getVal(  valSelectB,
+                fdMaValB     <= getVal(  valSelectB,
                                         outRegIdB,
                                         inRegValB,
                                         bypassRegId,
                                         bypassRegVal,
                                         immVal );
 
-                outValX     <= getVal(  valSelectX,
+                fdMaValX     <= getVal(  valSelectX,
                                         outRegIdX,
                                         inRegValX,
                                         bypassRegId,

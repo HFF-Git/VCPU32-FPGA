@@ -96,8 +96,8 @@ module CpuCore (
     );
 
     logic[WORD_LENGTH-1:0] wIaFdPstate0, wIaFdPstate1;
-    logic[WORD_LENGTH-1:0] wFdMaPstate0, wFdMaPstate1;
-    logic[WORD_LENGTH-1:0] wMaExPstate0, wMaExPstate1;
+    logic[WORD_LENGTH-1:0] wFdMaPstate0, wFdMaPstate1, wFdMaInstr, wFdMaValA, wFdMaValB, wFdMaValX;
+    logic[WORD_LENGTH-1:0] wMaExPstate0, wMaExPstate1, wMaExInstr, wMaExValA, wMaExValB, wMaExValX; 
 
     RegisterFile_3R_2W GREG (   .rst( rst ),
                                 .clk( clk )
@@ -112,29 +112,45 @@ module CpuCore (
                             );
 
     InstrAdrStage I_STAGE   (   .rst( rst), 
-                                .outPstate0( wIaFdPstate0 ), 
-                                .outPstate1( wIaFdPstate1 ) 
 
+                                // input from stages ...
+
+                                .iaFdPstate0( wIaFdPstate0 ), 
+                                .iaFdPstate1( wIaFdPstate1 ) 
                             );
 
     FetchDecodeStage FD_STAGE ( .rst( rst ), 
                                 .clk( clk ),
-                                .inPstate0( wIaFdPstate0 ), 
-                                .inPstate1( wIaFdPstate1 )
+                                .iaFdPstate0( wIaFdPstate0 ), 
+                                .iaFdPstate1( wIaFdPstate1 ),
 
+                                .fdMaPstate0( wFdMaPstate0 ),
+                                .fdMaPstate1( wFdMaPstate1 ),
+                                .fdMaValA( wFdMaValA ),
+                                .fdMaValB( wFdMaValB ),
+                                .fdMaValX( wFdMaValX )
                               );
 
     MemoryAccessStage MA_STAGE ( .rst( rst ), 
-                                .clk( clk ),
-                                .inPstate0( wFdMaPstate0 ), 
-                                .inPstate1( wFdMaPstate1 )
+                                 .clk( clk ),
 
+                                 .fdMaPstate0( wFdMaPstate0 ),
+                                 .fdMaPstate1( wFdMaPstate1 ),
+                                 .fdMaValA( wFdMaValA ),
+                                 .fdMaValB( wFdMaValB ),
+                                 .fdMaValX( wFdMaValX ),
+
+                                 .maExPstate0( wMaExPstate0 ),
+                                 .maExPstate1( wMaExPstate1 ),
+                                 .maExValA( wMaExValA ),
+                                 .maExValB( wMaExValB ),
+                                 .maExValX( wMaExValX )
                               );
 
     ExecuteStage EX_STAGE ( .rst( rst ), 
                             .clk( clk ),
-                            .inPstate0( wMaExPstate0 ), 
-                            .inPstate1( wMaExPstate1 )
+                            .maExPState0( wMaExPstate0 ), 
+                            .maExPState1( wMaExPstate1 )
 
                             );
 

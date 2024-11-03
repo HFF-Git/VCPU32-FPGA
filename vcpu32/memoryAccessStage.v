@@ -36,22 +36,22 @@ module MemoryAccessStage (
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage input.
     //-------------------------------------------------------------------------------------------------------- 
-    input  logic[WORD_LENGTH-1:0]   inPstate0,
-    input  logic[WORD_LENGTH-1:0]   inPstate1,
-    input  logic[WORD_LENGTH-1:0]   inInstr,
-    input  logic[WORD_LENGTH-1:0]   inValA,
-    input  logic[WORD_LENGTH-1:0]   inValB,
-    input  logic[WORD_LENGTH-1:0]   inValX,
+    input  logic[WORD_LENGTH-1:0]   fdMaPstate0,
+    input  logic[WORD_LENGTH-1:0]   fdMaPstate1,
+    input  logic[WORD_LENGTH-1:0]   fdMaInstr,
+    input  logic[WORD_LENGTH-1:0]   fdMaValA,
+    input  logic[WORD_LENGTH-1:0]   fdMaValB,
+    input  logic[WORD_LENGTH-1:0]   fdMaValX,
 
     //--------------------------------------------------------------------------------------------------------
     // Pipeline stage output.
     //-------------------------------------------------------------------------------------------------------- 
-    output logic[WORD_LENGTH-1:0]   outPstate0,
-    output logic[WORD_LENGTH-1:0]   ourPstate1,
-    output logic[WORD_LENGTH-1:0]   outI,
-    output logic[WORD_LENGTH-1:0]   outA,
-    output logic[WORD_LENGTH-1:0]   outB,
-    output logic[WORD_LENGTH-1:0]   outX
+    output logic[WORD_LENGTH-1:0]   maExPstate0,
+    output logic[WORD_LENGTH-1:0]   maExPstate1,
+    output logic[WORD_LENGTH-1:0]   maExInsr,
+    output logic[WORD_LENGTH-1:0]   maExValA,
+    output logic[WORD_LENGTH-1:0]   maExValB,
+    output logic[WORD_LENGTH-1:0]   maExValX
 
      //--------------------------------------------------------------------------------------------------------  
     // Interface to the D-Cache

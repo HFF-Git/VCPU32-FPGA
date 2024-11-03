@@ -29,17 +29,17 @@ module InstrAdrStage (
 
     input logic rst,
 
-    input  logic[WORD_LENGTH-1:0]   inDfPstate0,
-    input  logic[WORD_LENGTH-1:0]   inDfPstate1,
+    input  logic[WORD_LENGTH-1:0]   inFdPstate0,
+    input  logic[WORD_LENGTH-1:0]   inFdPstate1,
 
-    input  logic[WORD_LENGTH-1:0]   inOfPstate0,
-    input  logic[WORD_LENGTH-1:0]   inOfPstate1,
+    input  logic[WORD_LENGTH-1:0]   inMaPstate0,
+    input  logic[WORD_LENGTH-1:0]   inMaPstate1,
 
     input  logic[WORD_LENGTH-1:0]   inExPstate0,
     input  logic[WORD_LENGTH-1:0]   inExPstate1,
 
-    output logic[WORD_LENGTH-1:0]   outPstate0,
-    output logic[WORD_LENGTH-1:0]   outPstate1
+    output logic[WORD_LENGTH-1:0]   iaFdPstate0,
+    output logic[WORD_LENGTH-1:0]   iaFdPstate1
 
     );
 
