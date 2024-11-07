@@ -103,7 +103,7 @@ parameter SEG_ID_WORD_LENGTH    = 16;
 `define OP_LD           6'h30       // target = [ operand ]
 `define OP_ST           6'h31       // [ operand ] = target
 `define OP_LDA          6'h32       // load from absolute address
-`define OP_STA          6'h33       // store to absolute adress
+`define OP_STA          6'h33       // store to absolute address
 `define OP_LDR          6'h34       // load referenced
 `define OP_STC          6'h35       // store conditional
     
