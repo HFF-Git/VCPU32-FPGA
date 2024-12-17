@@ -25,27 +25,19 @@ parameter HUGO = 100; // ??? this works. We should use parameter instead of defi
 // Global definitions.
 //
 //------------------------------------------------------------------------------------------------------------
-/*
-`define BYTE_LENGTH           8
-`define HALF_WORD_LENGTH      16
-`define WORD_LENGTH           32
-`define DBL_WORD_LENGTH       64
-`define SEG_ID_WORD_LENGTH    16
-*/
-
-parameter BYTE_LENGTH           = 8;
-parameter HALF_WORD_LENGTH      = 16;
-parameter WORD_LENGTH           = 32;
-parameter DBL_WORD_LENGTH       = 64;
-parameter SEG_ID_WORD_LENGTH    = 16;
+parameter   BYTE_LENGTH           = 8;
+parameter   HALF_WORD_LENGTH      = 16;
+parameter   WORD_LENGTH           = 32;
+parameter   DBL_WORD_LENGTH       = 64;
+parameter   SEG_ID_WORD_LENGTH    = 16;
 
 
 //------------------------------------------------------------------------------------------------------------
 // The reset vector. Upon reset, execution starts at this address in real mode.
 //
 //------------------------------------------------------------------------------------------------------------
-`define RESET_IA_SEG          32'h0
-`define RESET_IA_OFS          32'hF0000000
+parameter   RESET_IA_SEG          = 32'h0;
+parameter   RESET_IA_OFS          = 32'hF0000000;
 
 
 //------------------------------------------------------------------------------------------------------------
