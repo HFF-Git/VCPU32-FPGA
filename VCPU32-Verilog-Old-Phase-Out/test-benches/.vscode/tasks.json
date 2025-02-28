@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+                {
+            "label": "simulate wave for selected file",
+            "type": "shell",
+            "command": "make -f ../scripts/Makefile all source=${file}",
+            "problemMatcher": []
+        },
+        {
+            "label": "simulate selected file",
+            "type": "shell",
+            "command": "make -f ../scripts/Makefile exec source=${file}",
+            "problemMatcher": []
+        },
+        {
+            "label": "build all files",
+            "type": "shell",
+            "command": "bash ../scripts/make_all.sh",
+            "problemMatcher": []
+        },
+        {
+            "label": "clean all",
+            "type": "shell",
+            "command": "rm ../simulation/*",
+            "problemMatcher": []
+        }
+    ]
+}
